@@ -6,6 +6,49 @@ changes. Only the merge role edits this file, from the "Board and log" section o
 D-001 to D-023 match D1 to D23 in the design spec
 (`docs/superpowers/specs/2026-10-19-southern-cross-design.md`).
 
+## 2026-10-19 · D-038 · Director · Major trainers' moves: Claude drafts a team sheet, the director edits it
+Each major trainer gets one sheet (legal moves at level, checked against the game's data) for him to change before it is built.
+
+## 2026-10-19 · D-037 · Director · Gym 1 (Dusty) team: Larvitar 12, Totodile 13, Gible 14 (ace)
+On hard the ace holds an Oran Berry; normal mode removes it (D-021).
+
+## 2026-10-19 · D-036 · Director · The director picks the full team and signature Pokémon of every major trainer
+Gym leaders, rival, Elite Four, Champion, villain leaders and admins. Never written before he answers; route trainers may be drafted.
+
+## 2026-10-19 · D-035 · Director · New Pokémon names come from Claude's shortlists, picked by the director
+
+## 2026-10-19 · D-034 · Director · Starters: three new regional lines, with art made now
+- A regional Sandile line: Water.
+- A regional Ekans line: Fire, later Fire/Ground, with a new third stage.
+- A new pre-evolution of Komala, a regional Komala and a new third stage: Grass/Poison.
+Their sprites are made for the slice: AI-assisted, cleaned to match the Essentials sprites, each spend asked first. This supersedes "no new art in the slice" for the starters only.
+
+## 2026-10-19 · D-033 · Director · Story and scenes come from an interview with the director, not drafts for approval
+The five slice scenes drafted in docs/region/STORY.md were not approved. They are rewritten from his interview answers (D-039).
+
+## 2026-10-19 · D-039 · Director · Slice story answers (interview)
+- **Opening:** the professor's welcome, then you wake up at home.
+- **Player:** a newcomer who lives with Mum and Dad.
+- **Professor:** Professor Gum, a dry-humoured field ecologist in muddy boots. Her partner is Kangaskhan.
+- **Rival:** Kit, gender left open, a friendly and proud local. Kit is drawn into Firebreak, then comes back, and takes the starter strong against yours.
+- **Home town:** Lyrebird Cove, a small surf and fishing town.
+- **First Firebreak sighting:** grunts netting introduced birds on Route 2.
+
+## 2026-10-19 · D-032 · Director · Gym 1 is Dragon (reptile Pokémon), led by Dusty, a reptile-park keeper, in Wattlebrook; gym 8 (Mistwood) is Bug
+This supersedes the drafted Flying gym 1 and Dragon gym 8. The other gyms, the Elite Four types and the level caps are as approved in D-031.
+
+## 2026-10-19 · D-031 · Director · Region and gym table approved as drafted (docs/region/REGION.md)
+Caps 14, 21, 28, 35, 42, 49, 56, 63, then 72 for the league. Gym types are as drafted, except where D-032 changes them.
+
+## 2026-10-19 · D-030 · Director · Villains are Team Firebreak; the player is a newcomer
+Firebreak is a former chief ranger's team that wants to drive out every Pokémon and person "not born of the land".
+
+## 2026-10-19 · D-029 · Director · Battle sprites: the modern Essentials style for every Pokémon (supersedes D-023)
+Why: no community pack draws Gens 4–9 in the Gen 3 style. The Gen 3 look (D-016) still applies to maps and screens. Changes: the "dex sprites must not be base files" content rule is removed.
+
+## 2026-10-19 · D-040 · Director · Download yes: Generation 9 Pack, Emerald Outdoors tileset, Voltseon's Emerald UI Pack
+All free. Each is credited and registered before it lands; stop and report any download over 200 MB.
+
 ## 2026-10-19 · D-028 · Director · The repo is public (reverses D-018's private)
 Why: GitHub would not run checks on the private repo because of an account billing block; public
 repos get free checks. Accepted cost: the project can be found before it is playable. Changes:
