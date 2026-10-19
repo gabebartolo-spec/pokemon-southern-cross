@@ -1,11 +1,12 @@
 ---
 name: psc-handoff
-description: Writing and starting from a Pokemon Southern Cross agent handoff - the file agent-handoffs/ROLE.md inside the repo that lets a fresh session continue without the old transcript, its 120-line cap, rewrite not append, and when to hand off. Use it when a task is done or you switch to unrelated work, when your context is getting long (past about 150k tokens), before the director restarts or clears a session, and at the start of any new session.
+description: Writing and starting from a Pokemon Southern Cross agent handoff - the file agent-handoffs/ROLE.md inside the repo that lets a fresh session continue without the old transcript, its 120-line cap, rewrite not append, and when to hand off. Use it when a task is done or you switch to unrelated work, when your context is getting long (past about about 200k tokens), before the director restarts or clears a session, and at the start of any new session.
 ---
 
 # Handoffs
 
-Fresh session at every task boundary; routine work at 50-100k tokens, past 150k hand off. Write
+Fresh session at every task boundary; hand off at about 200k context (director 2026-10-19; a helper past
+200k asks its lead for a restart, and the replacement keeps its name). Write
 the handoff first, then start the new session from it. The user-level Stop hook blocks a turn
 that changed the project without a fresh handoff; write it, never ask the director to remind you.
 

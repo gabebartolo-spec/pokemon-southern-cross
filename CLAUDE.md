@@ -57,7 +57,8 @@ taste and final judgement. Agents supply execution, evidence and honest pushback
 ## Sessions and context
 
 - Fresh session at every task boundary; write `agent-handoffs/<role>.md` first (120-line cap,
-  rewrite not append). Routine work at 50-100k tokens; past 150k, hand off.
+  edited when state changes, never appended). Hand off at about 200k context; wait in the background only;
+  a helper past 200k asks its lead for a restart, and the replacement keeps its name.
 - End every turn with your state: working, running a check, awaiting director, blocked, available.
 
 ## Skills
