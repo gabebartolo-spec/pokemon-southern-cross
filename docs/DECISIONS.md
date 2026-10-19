@@ -6,6 +6,11 @@ changes. Only the merge role edits this file, from the "Board and log" section o
 D-001 to D-023 match D1 to D23 in the design spec
 (`docs/superpowers/specs/2026-10-19-southern-cross-design.md`).
 
+## 2026-10-19 · D-044 · Director · Battle sprites: the Gen 9 Pack's full set for all Pokémon; supersedes D-029's Essentials set
+Why: base Essentials v21.1 has battlers for Gens 1-5 only; the pack's Gen 1-9 set is complete and one
+consistent look. Changes: the pack's fronts, full-body backs, icons and metrics replace the base
+battlers; the 480x320 battle layout is re-checked for the bigger sprites.
+
 ## 2026-10-19 · D-028 · Director · The repo is public (reverses D-018's private)
 Why: GitHub would not run checks on the private repo because of an account billing block; public
 repos get free checks. Accepted cost: the project can be found before it is playable. Changes:
