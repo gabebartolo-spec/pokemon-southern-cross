@@ -16,3 +16,13 @@
 
 # Engine sprite sheets and review images stay plain git: CI checks out without LFS
 # (LFS pointers get read as PNGs otherwise). Move a PNG to LFS only if it is huge.
+
+# Pokemon Essentials project data and art.
+*.rxdata binary
+*.dat    binary
+*.png    binary
+*.mid  filter=lfs diff=lfs merge=lfs -text
+
+# Essentials files are kept byte-exact so game/.psc_base_manifest.txt hashes match in any checkout.
+game/** -text
+game/Plugins/PSC_*/** text eol=lf

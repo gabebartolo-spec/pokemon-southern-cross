@@ -35,6 +35,7 @@ taste and final judgement. Agents supply execution, evidence and honest pushback
 4. **Data, not code, holds content and balance** (PBS files and `content/`, validated in CI by
    `tools/validate/`). Maps are authored as text in `content/maps/` and built by `tools/maps/`;
    the `.rxdata` files are build output. Magic numbers in plugins are rejected in review.
+   When PBS changes, the compiled game/Data/*.dat files are regenerated and committed in the same PR.
 5. **Licensing and credits.** Nothing enters the project unless `docs/LICENSING_REGISTER.md` lists
    it as CLEARED with its credit line; terms must allow use in a free fan game.
 6. **No spend** without the director's written yes in `docs/DECISIONS.md`.

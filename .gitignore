@@ -13,3 +13,6 @@ review/
 .claude/settings.local.json
 .pytest_cache/
 run.log
+
+# Essentials: Game.ini ships in the base kit and is tracked; local edits stay local (git update-index --assume-unchanged).
+game/Game.ini
