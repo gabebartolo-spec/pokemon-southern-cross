@@ -23,29 +23,45 @@ this file adds the map-specific checks. General lessons go to that skill's log, 
 3. Write what the map claims in one line (e.g. "Route 1 is a temperate coast route with two trainers and one
    building") and what must not change (warps, tile ids other maps rely on).
 
-## Checks (each: open the preview, answer yes or no, note the crop where it is no)
+## Checks (one yes/no question each, with the preview open; write the crop where the answer is the bad one)
 
-1. **Repeats.** Pick any row and any column: is there a run of 6 or more identical tiles in a line (a wall of the
-   same tree, a ruler-straight fence or path edge) that no building, sign or water edge explains? Yes = FIX.
-2. **Path edges.** Does every path or shore edge show its autotile border (no hard square corners where a curve
-   is expected), and does the path wander by at least one tile somewhere instead of running dead straight edge to edge?
-3. **Trees and cliffs layering.** For every tree, cliff top and roof: is its upper half on the top layer, so a
-   figure standing on the cell below would walk behind the canopy and not through a trunk cut in half? Is every
-   cliff face closed with a base row and a top lip, with no floating cap or missing corner?
-4. **Doors reachable.** For every building door and cave mouth: trace with a finger from the spawn or entry
-   warp to the cell in front of the door over cells the player can walk on. Can you reach it without crossing
-   water, a fence, a tree or a cliff? No = FIX. Is the door's own warp (blue) on the door cell and not one cell off?
-5. **Sight lines.** For every red trainer: does its red sight line stop at the first wall, tree, fence or
-   water tile, and does it cover the path the player must take (not only open grass beside it)? Does any line
-   cross a wall (a line drawn past a blocked tile means the preview or the map is wrong: stop and find which)?
-   Can the player reach the trainer's line's start from the entry without a detour through another trainer's line,
-   unless the design says so?
-6. **Events.** Is every event marker on a cell that makes sense (item ball not inside a tree, person not on a
-   warp, sign beside the path not on it)? Does every warp have a way back, a second blue marker on the target map?
-7. **Australian biome.** Does the map read as the biome its route claims, in one glance at game scale, with the
-   concrete signs below? A temperate-looking map labelled outback is a FIX.
-8. **Edges.** Does the map border fade into something (trees, water, cliff) with an intended exit, or does the
-   ground just stop? Any black cell (an empty tile in all three layers) inside the map is a FIX.
+Repeats
+1. Is there any row with a run of 6 or more identical tiles in a line that no building, sign or water edge explains? (yes = FIX)
+2. Is there any column with a run of 6 or more identical tiles in a line that nothing explains? (yes = FIX)
+
+Path edges
+3. Does every path edge show its autotile border, with no hard square corner where a curve is expected? (no = FIX)
+4. Does every shore edge show its autotile border, with no hard square corner? (no = FIX)
+5. Does at least one path bend or wander by a tile, rather than run dead straight edge to edge? (no = FIX)
+
+Trees, cliffs and roofs
+6. Is the upper half of every tree on the top layer, so a figure below it would walk behind the canopy? (no = FIX)
+7. Is every cliff face closed by a base row? (no = FIX)
+8. Is every cliff face closed by a top lip, with no floating cap or missing corner? (no = FIX)
+9. Is every roof on the top layer, so a figure at the door is not drawn over the eaves? (no = FIX)
+
+Doors
+10. Can you trace a walkable route from the entry warp or spawn to the cell in front of every building door, crossing no water, fence, tree or cliff? (no = FIX)
+11. Is every door's blue warp marker exactly on the door cell, not one cell off? (no = FIX)
+12. Is every warp's way back present, a blue marker on the target map? (no = FIX)
+
+Sight lines
+13. Does every red sight line stop at the first wall, tree, fence or water tile? (no = FIX; a line drawn past a blocked tile means the preview or the map is wrong, find which)
+14. Does every sight line cross the path the player must take, not only open grass beside it? (no = FIX unless the design says optional)
+15. Can the player reach the next map exit without crossing the sight line of a trainer the design did not place there? (no = FIX)
+
+Events
+16. Is every item ball on a walkable, open cell, not inside a tree or fence? (no = FIX)
+17. Is every person off every warp cell? (no = FIX)
+18. Is every sign beside the path, not on it? (no = FIX)
+
+Edges
+19. Does the map border end in trees, water or cliff, or an intended exit, rather than bare ground stopping? (no = FIX)
+20. Is every cell free of black (an empty tile on all three layers)? (no = FIX)
+
+Biome (see the table below)
+21. At game scale, in one glance, does the map show the "yes" signs for the biome its route claims? (no = FIX)
+22. Does the map show none of that biome's "no" signs? (no = FIX)
 
 ### What "reads as an Australian biome" means (design spec: outback, tropical north and reef, rainforest, alpine, temperate forest and coast, cities)
 
@@ -64,7 +80,7 @@ and the review says so rather than passing it as outback.
 
 ## Verdict
 
-PASS only when all eight answers are right and the evidence is attached (full preview, the crops you judged,
+PASS only when all 22 answers are right and the evidence is attached (full preview, the crops you judged,
 the build command output). FIX lists each defect as: preview crop (x, y, size), what is wrong, what right looks
 like. REJECT when the tileset cannot reach the claim (see the note above). Only a PASS goes to the director,
 as one decision with labelled images (follow `ask-the-director`).
