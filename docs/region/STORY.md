@@ -2,180 +2,173 @@
 
 Cap: 200 lines
 
-Status: draft for the director (Task 14, step 1), 2026-10-19. Nothing here is approved yet.
+Status: Story facts decided by the director (D-033, D-039); dialogue is a draft for his edit.
 Places are in [REGION.md](REGION.md). Binding: D-010 (classic story, darker villain with a real
-motive and stakes), D-011 (Mega Evolution only), D-023 (Gen 3-look sprites).
+motive and stakes), D-011 (Mega Evolution only), D-030 (Team Firebreak; the player is a
+newcomer), D-034 and D-041 (starters), D-035 (new names), D-036 and D-037 (major teams),
+D-039 (the interview answers).
 
 ## The heart of it
 
 Who belongs to a land? The Crux region is full of Pokémon found nowhere else, and full of
-Pokémon that arrived on ships, in suitcases and in trainers' pockets. Some of those newcomers
-really have hurt the land. The villains are right about the damage and wrong about the cure,
-and the player, a newcomer too, has to answer them with the team they built.
+Pokémon that arrived on ships, in suitcases and in trainers' pockets. Team Firebreak wants to
+drive out every Pokémon and person "not born of the land" (D-030), and the player, a newcomer,
+has to answer them with the team they built.
 
-## The cast
+## The cast (decided, D-030 and D-039)
 
-- **The player.** Named and dressed by the player. Moved to Lyrebird Cove a week ago with their
-  mum, from a region far to the north. Knows nobody. Their bedroom window looks across the strait
-  to a snow-capped island: the Pokémon League, where the story ends.
-- **Professor Acacia.** Studies how native and newly arrived Pokémon share the land. Muddy boots,
-  dry humour, a research station by the lighthouse. Partner Pokémon: Emolga (she calls it her
-  glider). Years ago she and the villain's leader were field partners.
-- **Kit, the rival.** Lives with their gran in Lyrebird Cove. Loud, generous, proud of the
-  region. Kit's family lost their farm in the mallee when a Bunnelby plague dug the paddocks to
-  dust, and nobody came to help. That wound is why Firebreak's message lands with Kit.
-- **Team Firebreak, the villains.** Ash-grey work clothes with a burnt-orange stripe, like a
-  rural fire crew. They call themselves volunteers and say they "clear the land so it can heal".
-- **Dr Imogen Hale, Firebreak's leader.** The region's former chief ranger. Calm, kind to her
-  grunts, utterly certain. Spent thirty years watching native Pokémon vanish from the places she
-  was paid to protect, and stopped believing the slow, legal ways would ever be enough.
+- **The player.** Named and dressed by the player. A newcomer to Lyrebird Cove, a small surf
+  and fishing town, who lives with Mum and Dad. Their bedroom window looks across the strait to
+  the island where the Pokémon League waits.
+- **Professor Gum.** A dry-humoured field ecologist in muddy boots. Her partner Pokémon is
+  Kangaskhan. Her research station sits on the headland by the lighthouse.
+- **Kit, the rival.** A friendly, proud local. Kit's gender is never stated: the game says
+  "Kit" or "they". Kit is drawn into Firebreak, then comes back, and always takes the starter
+  strong against yours.
+- **Team Firebreak, the villains.** A former chief ranger's team that wants to drive out every
+  Pokémon and person "not born of the land".
 
-## What Firebreak wants, and what is at stake
+**To ask the director:** what draws Kit into Firebreak? (The earlier draft gave Kit a family
+farm lost to Bunnelby; that was never his answer, so it is removed.)
 
-Hale believes trainers are how foreign Pokémon spread, and that the land can only heal if it is
-returned to how it was before. Firebreak's methods grow darker as the game goes on: false
-"biosecurity" checkpoints that take trainers' Pokémon; nets and holding yards for wild
-newcomers that nobody comes back for; poison laid for pests that kills everything else too.
-The endgame: wake the land's ancient guardian (proposed: Zygarde, the Order Pokémon; its
-Gen 3-style sprite must be confirmed, D-023) so the land itself drives out every Pokémon and
-every person not born of it. Half the region's Pokémon, most of the player's team, and the
-player themselves would be cast out. Hale knows. She calls it the price.
+**To ask the director:** what is the name of Firebreak's leader, the former chief ranger?
 
-> **Director to choose:** the villains' motive.
-> 1. **Firebreak, the land for its own (recommended).** Rooted in a real Australian problem
->    (introduced species), sympathetic at first, and it tests the player as a newcomer. Morally
->    grey like Black and White, with no copy of their plot.
-> 2. **A water company in a drought.** They drain the great underground basin to sell water
->    while the inland dies. Clearer villains, simpler to write, but less personal for the player.
+## Beyond the slice: earlier draft, not asked yet
 
-> **Director to choose:** where the player comes from.
-> 1. **A newcomer (recommended).** Firebreak's "not born here" logic points straight at the
->    player, which makes the stakes personal.
-> 2. **Born in Lyrebird Cove.** A classic start; the theme then rests on Kit and the team.
+Everything in this section is Claude's earlier outline, kept only so the slice has somewhere to
+lead. None of it is decided; it is replaced when the director is interviewed on the full story
+(D-033). Gym leaders' teams are his to pick (D-036).
 
-## One beat per gym
-
-1. **Wattlebrook (Flying).** On Route 2 Firebreak nets introduced Pidgey in nesting season. The
-   player stops them; Wren, the leader, is furious with them. First sight of the villains.
-2. **Port Halyard (Water).** Hale speaks at a rally on the harbour steps: calm, reasonable,
-   applauded. Kit is moved. Acacia, in the crowd, goes pale; she knows that voice.
-3. **Snowgum Heights (Ice).** Firebreak drives the wild Ponyta herds of the high plains toward a
-   cliff. Inge's ski patrol and the player turn the stampede. Inge admits the herds do trample
-   the alpine bogs. "But you don't run them off a cliff."
-4. **Mallee Downs (Fire).** Kit's family's old farm. Firebreak lights a burn-off to clear a
-   Bunnelby warren; the wind turns and the fire runs at the town. The player helps Kel's brigade
-   save it. Kit, bitter, joins Firebreak: "They're the only ones who ever turned up for us."
-5. **Opal Hollow (Rock).** Firebreak digs old shafts for an opalised carving of the guardian.
-   Hettie shows the player Mega Stones in the opal seams; Acacia brings the Mega Ring.
-6. **Westhaven, then Ironvale (Steel).** The player breaks into Firebreak's dockside lab and
-   finds the holding yards: cages of seized Pokémon, and the plan for the guardian. Kit is there,
-   sees the cages and walks out. In Ironvale, Dane learns his ore trains carried those cages.
+1. **Wattlebrook (Dragon).** Decided: on Route 2 Firebreak grunts net introduced birds. The
+   player stops them. Dusty, the gym leader, has no time for them.
+2. **Port Halyard (Water).** Firebreak's leader speaks at a rally on the harbour steps: calm,
+   reasonable, applauded. Kit is moved.
+3. **Snowgum Heights (Ice).** Firebreak drives the wild herds of the high plains toward a cliff.
+   Inge's ski patrol and the player turn the stampede.
+4. **Mallee Downs (Fire).** A Firebreak burn-off turns with the wind and runs at the town. The
+   player helps Kel's brigade save it. Kit joins Firebreak.
+5. **Opal Hollow (Rock).** Hettie shows the player Mega Stones in the opal seams; Professor Gum
+   brings the Mega Ring.
+6. **Westhaven, then Ironvale (Steel).** The player finds Firebreak's holding yards: cages of
+   seized Pokémon. Kit is there, sees the cages and walks out.
 7. **Mangrove Landing (Poison).** Firebreak poisons a floodplain to kill introduced toads; the
-   native Pokémon die with them. Tully and the player clean up. Two grunts quit in front of you.
-8. **Mistwood (Dragon), then the climax.** After the badge, Hale wakes the guardian in the old
-   growth beyond town. Vines close the roads and the ground shakes. With Kit and Acacia beside
-   you, you beat Hale and face the guardian itself. Hale walks into custody on her own feet:
-   "I wasn't wrong about the damage. Only about you."
+   native Pokémon die with them. Tully and the player clean up.
+8. **Mistwood (Bug), then the climax.** Firebreak's leader tries to wake an ancient guardian of
+   the land in the old growth beyond town. With Kit and Professor Gum beside you, you stop it.
 9. **The League.** The Coast Line train takes you home; the ferry crosses the strait. Kit waits
    at the top of Victory Road for one last battle, then the Elite Four and the Champion.
 
-## Starters (three, proposed)
+## Starters (decided, D-034 and D-041)
 
-All three are Gen 2 and Gen 3 Pokémon, so official Gen 3 sprites exist (D-023). Each is strong
-against one and weak against another, as usual.
+Three new regional lines. Their names come from Claude's shortlists, picked by the director
+(D-035); the placeholders below are not names.
 
-- **Treecko.** Geckos live all over this land, from rainforest to desert; a natural fit.
-- **Cyndaquil.** A shy burrower that flares up when threatened, at home in dry country where
-  fire is part of the land's cycle.
-- **Totodile.** The crocodile of the northern rivers, the region's most famous predator.
+- **KOALA_BABY (name TBD (D-035)), Grass/Poison line.** A joey asleep on a gum leaf it uses as
+  a blanket; the leaf's oil hints at Poison. It evolves into a regional Komala, then into a big
+  old-growth koala whose log has become a living, flowering gum branch, with a toxic oil mist:
+  a slow, bulky Grass/Poison.
+- **TAIPAN (name TBD (D-035)), the regional Ekans line, Fire.** An inland taipan of the red
+  centre with ember-red scales. Later Fire/Ground; its new third stage is a huge Fire/Ground
+  serpent that swims through hot red sand.
+- **CROC (name TBD (D-035)), the regional Sandile line, Water.** Saltwater (estuary)
+  crocodiles, river-mud brown and green. The Krookodile form is Water/Dark.
 
-Kit always takes the one strong against yours: Treecko → Kit takes Cyndaquil; Cyndaquil →
-Totodile; Totodile → Treecko.
+Kit takes the one strong against yours: KOALA_BABY → Kit takes TAIPAN; TAIPAN → CROC;
+CROC → KOALA_BABY.
 
-## Slice scene 1: intro (new game)
+## Draft dialogue for the director to edit
 
-A sunny clearing by the sea. Professor Acacia stands with an Emolga on her shoulder.
-- ACACIA: Hello there! Sorry, you've caught me in the middle of a survey. Welcome to the Crux region.
-- ACACIA: My name's Acacia. People call me the Professor, though mostly I'm the one with muddy boots.
-- ACACIA: This is Emolga. Out here we'd just call her a glider. She was born in these gum trees.
-- ACACIA: Plenty of Pokémon here live nowhere else on earth. Plenty more came on ships, or in someone's pocket.
-- ACACIA: How they all share this land is what I study. Sometimes they get along. Sometimes they really don't.
-- ACACIA: Before we start, tell me how you like your road.
+The five slice scenes below are written from his answers (D-039). Every line is his to change.
+
+### Slice scene 1: intro (new game)
+
+Professor Gum's welcome. A clearing by the sea; Gum stands in muddy boots, Kangaskhan beside her.
+- GUM: Oh. Hello. Mind the mud, I've been out since dawn counting Pokémon. Welcome to the Crux region.
+- GUM: I'm Professor Gum. Field ecologist, which mostly means I live in wet boots.
+- GUM: This is Kangaskhan. She keeps an eye on me out in the bush. Someone has to.
+- GUM: Plenty of Pokémon here live nowhere else on earth. Plenty more came on ships, or in someone's pocket.
+- GUM: How they all share this land is what I study. Some days they get along. Some days they very much don't.
+- GUM: Before we start, tell me how you like your road.
 - Choice: **Normal** (a friendlier road) / **Hard** (every trainer plays to win).
-- If Hard, ACACIA: Good on you. On the hard road your Pokémon can't grow past what the next Gym
+- If Hard, GUM: Brave. On the hard road your Pokémon can't grow past what the next Gym
   Leader is ready for. Win the Badge, and they can grow again.
-- ACACIA: Now, who are you? (Name and look are chosen.)
-- ACACIA: Of course! You're the one who moved into the house by the lighthouse. Welcome home.
+- GUM: Now, who are you? (Name and look are chosen.)
+- GUM: Of course. You're the new family in the house by the lighthouse. Welcome to Lyrebird Cove.
 
-The player wakes in a half-unpacked bedroom. Through the window, across grey water, an island
-rises from the sea with snow on its peak, even in spring.
-- MUM: You're up! Professor Acacia rang. She wants you at the research station this morning.
-- MUM: Something about a welcome present. And put a jumper on, it's blowing a gale out there.
+The player wakes at home, in a half-unpacked bedroom. Through the window, across grey water,
+the island rises from the sea with snow on its peak.
+- MUM: Morning, love! Professor Gum rang while you were asleep. She wants you up at the research station.
+- DAD: Something about a welcome present. Take a jumper, the wind's coming straight off the water.
+- MUM: And say hello to people on the way. We're the new ones, remember.
 
-## Slice scene 2: choosing a starter
+### Slice scene 2: choosing a starter
 
 The research station on the headland. Kit is already there, bouncing on their heels.
-- KIT: Finally! The Prof wouldn't let me pick till the new kid showed up. I'm Kit. I live up the hill with my gran.
-- ACACIA: Kit's been waiting since sunrise. Three Pokémon, three corners of the region. You choose first, as our guest.
-- Treecko: Treecko, from the forests. Geckos live all over this land, rainforest to desert. Cool-headed and quick.
-- Cyndaquil: Cyndaquil, from the dry country. Shy until it's cornered, then it flares right up.
-- Totodile: Totodile, from the northern rivers. Small now. The big ones up north can clear a riverbank in one snap.
-- ACACIA: Are you sure? This one will be with you a long time. (Yes / No)
-- KIT: Then I'll have this one! (Kit takes the starter strong against yours.) Don't look at me like that. Fair's fair, you got first pick.
-- ACACIA: And this is a Pokédex. It remembers every Pokémon you meet. Fill it in and you'll know
-  this land better than most people born here.
-- KIT: Better than me? Not a chance. Come on, newbie. Out on the lawn.
+- KIT: There you are! The Prof wouldn't let me pick till the new kid turned up. I'm Kit. Born and bred in the Cove.
+- GUM: Kit's been here since sunrise. Three Pokémon, three corners of the region. You're our guest, so you choose first.
+- KOALA_BABY, GUM: From the gum forests. It sleeps on a gum leaf like a blanket. The oil on that leaf? Don't lick it.
+- TAIPAN, GUM: From the red centre. Those ember-red scales hold the desert's heat. Quick, and it never backs down.
+- CROC, GUM: From the estuaries up north, where the rivers meet the sea. Small now. Its family grows into the biggest crocs in the land.
+- GUM: Sure? This one will be with you a long time. (Yes / No)
+- KIT: Then I'll take this one! (Kit takes the starter strong against yours.) Don't give me that look. You had first pick. Fair's fair.
+- GUM: And this is a Pokédex. It remembers every Pokémon you meet. Fill it in and you'll know
+  this land better than plenty of people born here.
+- KIT: Better than me? Not likely. Come on, then. Out on the lawn.
 
-## Slice scene 3: the rival battle
+### Slice scene 3: the rival battle
 
 On the lawn outside, wind snapping the station's flag.
-- KIT: Gran says I've got more mouth than sense. Let's prove her wrong, eh?
+- KIT: I know every rock pool and track from here to the ford. Let's see if you can keep up.
 - Battle: Kit, one Pokémon (the starter, level 5).
-- If the player wins, KIT: Alright, alright. Beginner's luck. I'll be ready next time, promise.
-- If Kit wins, KIT: Ha! Don't feel bad. I've been waiting my whole life for that.
-- ACACIA heals both teams. ACACIA: Wattlebrook's Gym is up through the forest. Wren is tough,
-  but fair. And take these Poké Balls. Catch what you meet; a good team is built, not given.
-- KIT: First Badge is mine. See ya in Wattlebrook!
+- If the player wins, KIT: Fair enough, you got me. Next time'll be different, promise.
+- If Kit wins, KIT: Ha! Welcome to the Cove. Don't worry, you'll get there.
+- GUM heals both teams. GUM: Wattlebrook's Gym is up through the forest. Dusty keeps the
+  reptile park there, and the Gym with it. Take these Poké Balls. A good team is built, not handed to you.
+- KIT: First Badge is mine. See you in Wattlebrook!
 
-## Slice scene 4: the first villain sighting (Route 2, by the ford)
+### Slice scene 4: the first Firebreak sighting (Route 2, by the ford)
 
-A mist net is strung between two gum trees. Three Pidgey are tangled in it; a nest lies on the
-ground. Two people in grey work clothes with a burnt-orange stripe are folding a cage.
-- GRUNT 1: Keep walking, kid. Biosecurity. Nothing to see.
-- GRUNT 2: These Pidgey came in on the grain ships a hundred years back. They've pushed every
-  little native bird out of this gully. Someone has to do something.
-- GRUNT 1: We're Firebreak. We look after the land. Now move along.
-- If the player talks to them again, GRUNT 1: Right. You want to argue? Let's argue properly.
+A net is strung between two gum trees, with introduced birds tangled in it. Two Firebreak
+grunts are folding a cage.
+- GRUNT 1: Keep walking. Firebreak business.
+- GRUNT 2: These birds came in on the ships, years back. They've pushed the little native birds
+  right out of this gully. Someone has to do something.
+- GRUNT 1: We look after the land. Not born of it, not welcome on it. Now move along.
+- If the player talks to them again, GRUNT 1: You want to argue? Go on, then.
 - Battle: Firebreak grunt (two Pokémon).
-- GRUNT 1 (beaten): Fine. Keep your Pidgey. One day you'll look round and wonder where all the
-  native birds went. Come on. Plenty more gullies.
-They cut the net and leave. The Pidgey fly off. Kit jogs up the track.
-- KIT: Was that Firebreak? I've heard of them. They cleared the Bunnelby off a farm near my
-  family's old place. Did more than anyone else ever did.
-- KIT: Before Gran and me came here, we had a farm in the mallee. Bunnelby dug it to dust.
-- Choice: **"They were hurting those Pidgey."** / **"Maybe they've got a point."**
-- KIT (first): Yeah... Robbing nests is low. I'm just saying, someone has to care.
-- KIT (second): Right? Not everyone thinks so. Anyway, Badge first, deep thoughts later!
+- GRUNT 1 (beaten): Fine. Keep your birds. One day you'll look round and wonder where all the
+  native ones went.
+- GRUNT 2: And you're not from round here either, are you? Come on. Plenty more gullies.
+They cut the net and leave. The birds fly off. Kit jogs up the track.
+- KIT: Was that Firebreak? I've seen their posters in town. They reckon they're looking after the place.
+- KIT: Someone's got to, right? The Cove's changed heaps since I was little.
+- Choice: **"They were hurting those birds."** / **"Maybe they've got a point."**
+- KIT (first): Yeah... netting them like that is rough. I'm just saying, someone has to care.
+- KIT (second): Right? Not everyone sees it. Anyway, Badge first, big questions later!
 
-## Slice scene 5: the first gym (Wattlebrook, Flying)
+**To ask the director:** which introduced bird Pokémon is Firebreak netting on Route 2? (The
+dialogue says "birds" until he picks.)
 
-The gym is a timber platform built around one enormous gum tree. Rope walkways climb through the
-canopy; wooden shutters bang open, and the gusts push you along the walks. Two trainers wait on
-the way up: a Birdwatcher and an Arborist.
-- GYM GUIDE (at the door): Hey, challenger! Wren's birds hit hard and hit first. Bring something
-  that can take a peck, or something that can strike back at the sky.
-- BIRDWATCHER: Shh! You'll scare off the... oh, it's a battle. Fine, but quietly.
-- ARBORIST: These walks are older than my nan. Hold on tight when the shutters open!
-- WREN: So you're the one who sent those Firebreak cowboys packing. Thanks for that.
-- WREN: It's spring. Swooping season. The magpies don't care how big you are.
-- WREN: They only care whether you're ready. Are you?
-- Battle: Wren, ace Staravia at level 14 (team set in the gym leaders task).
-- WREN (beaten): Ha! You stood your ground. That's all a magpie ever asks.
-- WREN: This is the Swoop Badge. It's yours.
-- If Hard, WREN: Your Pokémon can grow up to level 21 now.
-- WREN: And this is Aerial Ace. A good move never misses, and neither does a good trainer.
-- WREN: About Firebreak. They're not wrong that the Pidgey crowd out the little birds. But you
-  don't rob nests in spring. Not in my town.
+### Slice scene 5: the first gym (Wattlebrook, Dusty's reptile park)
+
+The Gym is Dusty's reptile park. A path winds between the enclosures, and reptile Pokémon bask
+on sun-warmed rocks. Two keepers wait on the way in.
+- GYM GUIDE (at the gate): Hey, challenger! Dusty's Pokémon are Dragons and reptiles, and they
+  bite hard. Bring something that can stand up to them.
+- KEEPER 1: Careful on the path. Everything in here was sunning itself till you walked in.
+- KEEPER 2: Feeding time's over, but I've still got a battle in me.
+- DUSTY: So you're the one who chased Firebreak off Route 2. Word gets round fast in Wattlebrook.
+- DUSTY: I've raised every one of my Pokémon from a hatchling. Warm rocks, patience, respect.
+- DUSTY: Let's see if you've got the patience. Ready?
+- Battle: Dusty, Larvitar 12, Totodile 13, Gible 14 (ace; holds an Oran Berry on hard; D-037).
+- DUSTY (beaten): Well. You kept your cool, and so did your team. That's all I ask.
+- DUSTY: Here's the [badge name]. It's yours.
+- If Hard, DUSTY: Your Pokémon can grow up to level 21 now.
+- DUSTY: And take this. [the move Dusty gives]
+- DUSTY: About Firebreak. They're not wrong that some newcomers do harm. But you don't net a
+  whole gully and call it caring. Not near my park.
 Outside, Kit is waiting, Badge already pinned on.
-- KIT: Took your time! Port Halyard's down the coast. Big city, the ferries, the bridge. You'll love it.
+- KIT: Took your time! Port Halyard's next, down the coast. Ferries, the big bridge. You'll love it.
 End of the slice.
+
+**To ask the director:** what is Dusty's badge called, and which move comes with it?

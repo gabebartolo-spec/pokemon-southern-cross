@@ -43,7 +43,7 @@ RAINFOREST = [(1250, 300), (1460, 300), (1530, 570), (1300, 570)]
 NODES = {
     "Lyrebird Cove": (1180, 1000, "start", "Start", "w"),
     "Ford": (1265, 945, "stop", "", ""),
-    "Wattlebrook": (1335, 855, "gym1", "Gym 1  Flying  cap 14", "e"),
+    "Wattlebrook": (1335, 855, "gym1", "Gym 1  Dragon  cap 14", "e"),
     "Port Halyard": (1480, 725, "gym2", "Gym 2  Water  cap 21", "n"),
     "Bend": (1235, 765, "stop", "", ""),
     "Snowgum Heights": (1075, 870, "gym3", "Gym 3  Ice  cap 28", "s"),
@@ -54,8 +54,8 @@ NODES = {
     "Westhaven": (235, 880, "town", "City", "n"),
     "Ironvale": (330, 400, "gym6", "Gym 6  Steel  cap 49", "s"),
     "Mangrove Landing": (760, 190, "gym7", "Gym 7  Poison  cap 56", "s"),
-    "Coralhaven": (1210, 285, "town", "", "w"),
-    "Mistwood": (1360, 440, "gym8", "Gym 8  Dragon  cap 63", "w"),
+    "Coralhaven": (1210, 285, "town", "", "n"),
+    "Mistwood": (1360, 440, "gym8", "Gym 8  Bug  cap 63", "w"),
     "Strait Landing": (1175, 1150, "stop", "", ""),
     "Crux Summit": (1250, 1235, "league", "Pokémon League  cap 72", "e"),
 }
@@ -199,7 +199,7 @@ def main():
 
     # title
     d.text((40, 24), "Crux region (working name): route schematic", font=font(36, True), fill=INK)
-    d.text((40, 70), "Draft for the director, 2026-10-19. North is up; not to scale.",
+    d.text((40, 70), "Approved (D-031, D-032), 2026-10-19. North is up; not to scale.",
            font=font(22), fill=INK)
 
     # legend
