@@ -25,3 +25,4 @@
 
 # Essentials files are kept byte-exact so game/.psc_base_manifest.txt hashes match in any checkout.
 game/** -text
+game/Plugins/PSC_*/** text eol=lf
