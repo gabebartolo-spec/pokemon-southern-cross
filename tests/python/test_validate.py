@@ -159,3 +159,14 @@ def test_unparseable_encounter_line_rejected(tmp_path):
     enc.write_text(enc.read_text(encoding="utf-8") + "    50,TESTA\n", encoding="utf-8")
     errors = content.validate(repo)
     assert len(errors) == 1 and "cannot parse" in errors[0]
+
+
+def test_lfs_pointer_hashes_as_its_content(tmp_path):
+    repo = make_repo(tmp_path)
+    audio = repo / "game" / "Audio" / "a.mid"
+    audio.parent.mkdir()
+    digest = hashlib.sha256(b"midi bytes").hexdigest()
+    audio.write_bytes(f"version https://git-lfs.github.com/spec/v1\noid sha256:{digest}\nsize 10\n".encode())
+    manifest = repo / "game" / ".psc_base_manifest.txt"
+    manifest.write_text(manifest.read_text(encoding="utf-8") + f"{digest}  Audio/a.mid\n", encoding="utf-8")
+    assert content.validate(repo) == []

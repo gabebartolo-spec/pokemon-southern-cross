@@ -47,7 +47,14 @@ def _manifest(root):
 
 
 def _sha(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    """sha256 of the file's content. CI checks out without LFS, so an LFS pointer file stands
+    for its content: its `oid sha256:` is the content hash."""
+    data = Path(path).read_bytes()
+    if data.startswith(b"version https://git-lfs.github.com/spec/v1"):
+        m = re.search(rb"^oid sha256:([0-9a-f]{64})$", data, re.M)
+        if m:
+            return m.group(1).decode()
+    return hashlib.sha256(data).hexdigest()
 
 
 def _glob_re(glob):
