@@ -1,0 +1,116 @@
+{
+ "source": "game/Data/Map010.rxdata event 2 (Gym Guy)",
+ "map": 10,
+ "event_id": 2,
+ "object": {
+  "id": 2,
+  "name": "Gym Guy",
+  "type": "npc",
+  "x": 224,
+  "y": 384,
+  "width": 32,
+  "height": 32,
+  "properties": [
+   {
+    "name": "graphic",
+    "type": "string",
+    "value": "NPC 15"
+   },
+   {
+    "name": "text",
+    "type": "string",
+    "value": "\\bThis is an example of a Pok\u00e9mon Gym.\n\n\\bThe only differences are that the trainers become \ninactive when the Leader is defeated, and the \nLeader gives you a Gym Badge and TM as a reward."
+   }
+  ]
+ },
+ "event": {
+  "class": "RPG::Event",
+  "@pages": [
+   {
+    "class": "RPG::Event::Page",
+    "@move_type": 0,
+    "@list": [
+     [
+      0,
+      101,
+      [
+       "\\bThis is an example of a Pok\u00e9mon Gym."
+      ]
+     ],
+     [
+      0,
+      101,
+      [
+       "\\bThe only differences are that the trainers become "
+      ]
+     ],
+     [
+      0,
+      401,
+      [
+       "inactive when the Leader is defeated, and the "
+      ]
+     ],
+     [
+      0,
+      401,
+      [
+       "Leader gives you a Gym Badge and TM as a reward."
+      ]
+     ],
+     [
+      0,
+      0,
+      []
+     ]
+    ],
+    "@condition": {
+     "class": "RPG::Event::Page::Condition",
+     "@switch2_valid": false,
+     "@self_switch_ch": "A",
+     "@switch1_id": 1,
+     "@switch1_valid": false,
+     "@variable_value": 0,
+     "@self_switch_valid": false,
+     "@variable_id": 1,
+     "@variable_valid": false,
+     "@switch2_id": 1
+    },
+    "@direction_fix": false,
+    "@move_route": {
+     "class": "RPG::MoveRoute",
+     "@list": [
+      {
+       "class": "RPG::MoveCommand",
+       "@parameters": [],
+       "@code": 0
+      }
+     ],
+     "@skippable": false,
+     "@repeat": true
+    },
+    "@trigger": 0,
+    "@step_anime": false,
+    "@move_frequency": 3,
+    "@graphic": {
+     "class": "RPG::Event::Page::Graphic",
+     "@opacity": 255,
+     "@character_name": "NPC 15",
+     "@pattern": 0,
+     "@tile_id": 0,
+     "@direction": 2,
+     "@blend_type": 0,
+     "@character_hue": 0
+    },
+    "@always_on_top": false,
+    "@walk_anime": true,
+    "@move_speed": 3,
+    "@through": false
+   }
+  ],
+  "@name": "Gym Guy",
+  "@y": 12,
+  "@x": 7,
+  "@id": 2
+ }
+}

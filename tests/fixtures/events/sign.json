@@ -1,0 +1,111 @@
+{
+ "source": "game/Data/Map049.rxdata event 9 (Sign)",
+ "map": 49,
+ "event_id": 9,
+ "object": {
+  "id": 9,
+  "name": "Sign",
+  "type": "sign",
+  "x": 448,
+  "y": 320,
+  "width": 32,
+  "height": 32,
+  "properties": [
+   {
+    "name": "text",
+    "type": "string",
+    "value": "The positions of the boulders are checked by a \nParallel Process event.\n\nThe hole event must have its \"Through\" option set, to \nallow boulder events to be pushed onto it."
+   }
+  ]
+ },
+ "event": {
+  "class": "RPG::Event",
+  "@pages": [
+   {
+    "class": "RPG::Event::Page",
+    "@move_type": 0,
+    "@list": [
+     [
+      0,
+      101,
+      [
+       "The positions of the boulders are checked by a "
+      ]
+     ],
+     [
+      0,
+      401,
+      [
+       "Parallel Process event."
+      ]
+     ],
+     [
+      0,
+      101,
+      [
+       "The hole event must have its \"Through\" option set, to "
+      ]
+     ],
+     [
+      0,
+      401,
+      [
+       "allow boulder events to be pushed onto it."
+      ]
+     ],
+     [
+      0,
+      0,
+      []
+     ]
+    ],
+    "@condition": {
+     "class": "RPG::Event::Page::Condition",
+     "@switch2_valid": false,
+     "@self_switch_ch": "A",
+     "@switch1_id": 1,
+     "@switch1_valid": false,
+     "@variable_value": 0,
+     "@self_switch_valid": false,
+     "@variable_id": 1,
+     "@variable_valid": false,
+     "@switch2_id": 1
+    },
+    "@direction_fix": false,
+    "@move_route": {
+     "class": "RPG::MoveRoute",
+     "@list": [
+      {
+       "class": "RPG::MoveCommand",
+       "@parameters": [],
+       "@code": 0
+      }
+     ],
+     "@skippable": false,
+     "@repeat": true
+    },
+    "@trigger": 0,
+    "@step_anime": false,
+    "@move_frequency": 3,
+    "@graphic": {
+     "class": "RPG::Event::Page::Graphic",
+     "@opacity": 255,
+     "@character_name": "",
+     "@pattern": 0,
+     "@tile_id": 0,
+     "@direction": 2,
+     "@blend_type": 0,
+     "@character_hue": 0
+    },
+    "@always_on_top": false,
+    "@walk_anime": true,
+    "@move_speed": 3,
+    "@through": false
+   }
+  ],
+  "@name": "Sign",
+  "@y": 10,
+  "@x": 14,
+  "@id": 9
+ }
+}
