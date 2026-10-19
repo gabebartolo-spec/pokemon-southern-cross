@@ -9,6 +9,7 @@ in the same PR as the content that made them.
 ```bash
 python tools/maps/build.py              # content/maps/*.tmj -> game/Data
 python tools/maps/export_tmj.py 2       # base Map002 -> content/maps/002_<slug>.tmj (to start from)
+python tools/maps/preview.py [id ...]   # built maps -> out/previews/<id>.png at 2x (needs Pillow); review with psc-map-review
 ```
 
 ## Map files
