@@ -7,6 +7,10 @@ content/dex.json "regional", and every file under game/ that is not an unmodifie
 
 `validate(repo_root)` returns error strings; an empty list is valid. Run as a script it prints
 the errors and `CHECKS <n>`, where n is the number of validation rules run (len(RULES)).
+
+`--emit-caps` writes the level caps (badges held before a segment -> that segment's cap) from
+content/progression.json to every path in CAPS_FILES: content/caps.json for people and tools,
+game/Data/psc_caps.json for the PSC_Difficulty plugin, which reads it at runtime.
 """
 import hashlib
 import json
@@ -21,6 +25,7 @@ except ImportError:  # run as a script
     import pbs
 
 MANIFEST = "game/.psc_base_manifest.txt"
+CAPS_FILES = ("content/caps.json", "game/Data/psc_caps.json")
 BASE_MARKER = "base-manifest"
 
 
@@ -200,6 +205,35 @@ def rule_dex_sprites_not_base(root):
     return errors
 
 
+def caps_text(root):
+    """The caps file text: {"<badges held before the segment>": cap}, one flat line. Segment i is
+    reached with i badges. The plugin's parser (PSC::Rules.parse_caps) accepts only this shape."""
+    caps = {str(i): int(seg["cap"]) for i, seg in enumerate(_segments(root))}
+    return json.dumps(caps) + "\n"
+
+
+def emit_caps(root):
+    text = caps_text(root)
+    for rel in CAPS_FILES:
+        path = Path(root) / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8", newline="\n")
+    return text
+
+
+def rule_caps_in_sync(root):
+    want = caps_text(root)
+    errors = []
+    for rel in CAPS_FILES:
+        path = Path(root) / rel
+        if not path.is_file():
+            errors.append(f"{rel} is missing; run tools/validate/content.py --emit-caps")
+        elif path.read_text(encoding="utf-8") != want:
+            errors.append(f"{rel} is out of sync with content/progression.json; "
+                          f"run tools/validate/content.py --emit-caps")
+    return errors
+
+
 def rule_added_files_registered(root):
     patterns = [_glob_re(g) for g in _register_globs(root)]
     return [f"game/{rel} is not in the base manifest and matches no Paths glob in "
@@ -212,7 +246,7 @@ def rule_added_files_registered(root):
 RULES = [rule_trainers_listed_exist, rule_trainers_within_cap,
          rule_encounters_present_and_parsable, rule_encounters_within_cap,
          rule_encounter_species_in_dex, rule_dex_sprites_exist, rule_dex_sprites_not_base,
-         rule_added_files_registered]
+         rule_added_files_registered, rule_caps_in_sync]
 
 
 def validate(repo_root):
@@ -222,8 +256,11 @@ def validate(repo_root):
     return errors
 
 
-def main():
+def main(argv=None):
+    argv = sys.argv[1:] if argv is None else argv
     root = Path(__file__).resolve().parents[2]
+    if "--emit-caps" in argv:
+        print(f"caps {emit_caps(root).strip()} -> {', '.join(CAPS_FILES)}")
     errors = validate(root)
     for e in errors:
         print(f"ERROR {e}")

@@ -15,6 +15,7 @@ REGISTER = """# Licensing register
 |---|---|---|---|---|---|---|
 | Pokémon Essentials | u | v | t | c | CLEARED | `game/**` (base-manifest) |
 | Gen 3 sprites | u | v | t | c | CLEARED | `game/Graphics/Pokemon/Front/TEST*.png`, `game/Graphics/Pokemon/Back/TEST*.png` |
+| Caps | u | v | t | c | CLEARED | `game/Data/psc_caps.json` |
 """
 TRAINERS = "\ufeff# header\n#---\n[LEADER,Rex]\nLoseText = x\nPokemon = TESTA,{lvl}\n    Moves = TACKLE\n"
 ENCOUNTERS = "\ufeff# header\n#---\n[007] # Route\nLand,21\n    60,{sp},{lo},{hi}\n    40,TESTA,3\n"
@@ -49,6 +50,7 @@ def make_repo(tmp_path, cap=15, lvl=10, species=("TESTA",), enc_species="TESTA",
     for sp in species:
         png(r, "Front", sp)
         png(r, "Back", sp)
+    content.emit_caps(r)
     return r
 
 
@@ -170,3 +172,43 @@ def test_lfs_pointer_hashes_as_its_content(tmp_path):
     manifest = repo / "game" / ".psc_base_manifest.txt"
     manifest.write_text(manifest.read_text(encoding="utf-8") + f"{digest}  Audio/a.mid\n", encoding="utf-8")
     assert content.validate(repo) == []
+
+
+def _segments(repo, *caps):
+    (repo / "content" / "progression.json").write_text(json.dumps({"segments": [
+        {"id": f"gym{i + 1}", "cap": c, "trainers": [], "maps": []} for i, c in enumerate(caps)]}))
+
+
+def test_caps_keyed_by_badges_before_each_segment(tmp_path):
+    repo = make_repo(tmp_path)
+    _segments(repo, 14, 20, 26)
+    content.emit_caps(repo)
+    for rel in content.CAPS_FILES:
+        assert json.loads((repo / rel).read_text(encoding="utf-8")) == {"0": 14, "1": 20, "2": 26}
+    assert content.validate(repo) == []
+
+
+def test_caps_out_of_sync_rejected(tmp_path):
+    repo = make_repo(tmp_path)
+    _segments(repo, 14, 20)
+    errors = content.validate(repo)
+    assert len(errors) == 2 and all("out of sync" in e for e in errors)
+
+
+def test_caps_file_missing_rejected(tmp_path):
+    repo = make_repo(tmp_path)
+    (repo / "game" / "Data" / "psc_caps.json").unlink()
+    errors = content.validate(repo)
+    assert errors == ["game/Data/psc_caps.json is missing; run tools/validate/content.py --emit-caps"]
+
+
+def test_caps_file_is_one_flat_line_the_plugin_can_parse(tmp_path):
+    repo = make_repo(tmp_path)
+    _segments(repo, 14, 20)
+    assert content.caps_text(repo) == '{"0": 14, "1": 20}\n'
+
+
+def test_real_repo_caps_match_progression():
+    want = content.caps_text(ROOT)
+    for rel in content.CAPS_FILES:
+        assert (ROOT / rel).read_text(encoding="utf-8") == want
