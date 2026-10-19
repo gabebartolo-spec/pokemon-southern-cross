@@ -14,6 +14,8 @@ added file, so `game/**` there does not match everything.
 | pytest | https://github.com/pytest-dev/pytest | pip | MIT; dev-only test runner, never shipped | none required | CLEARED | none (dev-only, never shipped) |
 | Pillow | https://github.com/python-pillow/Pillow | 12.3.0 (pip) | HPND (MIT-CMU style) licence: use freely with the notice; dev-only map preview renderer, never shipped | none required | CLEARED | none (dev-only, never shipped) |
 | Southern Cross map data (built from content/maps) | this repo (`content/maps`, `content/tilesets`, built by `tools/maps/build.py`) | per commit | Our own work for this free fan game; built output of our map sources | none required (project credits) | CLEARED | `game/Data/Map*.rxdata` |
+| Pokemon Southern Cross plugins (our own Ruby, extending Essentials) | this repo | n/a | Own work; it adapts Essentials code, so it is shared under Essentials' CC BY-NC-SA 4.0 (non-commercial, same licence) | Pokemon Southern Cross contributors | CLEARED | `game/Plugins/PSC_*/**` |
+| Southern Cross level caps (generated from content/progression.json) | this repo (`tools/validate/content.py --emit-caps`) | per commit | Our own work for this free fan game; generated data read by the PSC_Difficulty plugin | none required (project credits) | CLEARED | `game/Data/psc_caps.json` |
 
 Pokémon names, characters and graphics belong to Nintendo, Creatures, GAME FREAK and The Pokémon Company
 (see `docs/CREDITS.md`). This is a free, never-sold fan game.
