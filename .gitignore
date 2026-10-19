@@ -13,3 +13,8 @@ review/
 .claude/settings.local.json
 .pytest_cache/
 run.log
+
+# Essentials: compiled PBS (rebuilt by the game) and local Game.ini edits.
+# Game.ini ships in the base kit and is tracked; edits stay local (git update-index --assume-unchanged).
+game/Data/*.dat
+game/Game.ini
