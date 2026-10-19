@@ -26,3 +26,16 @@ def test_floor_rejects_lower_count(tmp_path):
 def test_floor_accepts_equal_count(tmp_path):
     result = run_floors(tmp_path, "SUITE python CHECKS 4\n", "python 4\n")
     assert result.returncode == 0
+
+
+def test_floor_ignores_skipped_suite(tmp_path):
+    result = run_floors(tmp_path, "SUITE python CHECKS 4\nSUITE ruby SKIPPED (no ruby)\n",
+                        "python 4\nruby 1\n")
+    assert result.returncode == 0
+    assert "skip ruby" in result.stdout
+
+
+def test_floored_suite_with_no_result_fails(tmp_path):
+    result = run_floors(tmp_path, "SUITE python CHECKS 4\n", "python 4\nruby 1\n")
+    assert result.returncode == 1
+    assert "no result" in result.stdout
