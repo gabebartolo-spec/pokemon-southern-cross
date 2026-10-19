@@ -122,3 +122,40 @@ def test_pbs_trainer_version_zero_equals_no_version(tmp_path):
 
 def test_real_repo_is_valid():
     assert content.validate(ROOT) == []
+
+
+def test_overwritten_base_sprite_needs_register_entry(tmp_path):
+    repo = make_repo(tmp_path)
+    gfx = repo / "game" / "Graphics" / "base.png"
+    gfx.write_bytes(b"orig")
+    manifest = repo / "game" / ".psc_base_manifest.txt"
+    manifest.write_text(manifest.read_text(encoding="utf-8")
+                        + f"{hashlib.sha256(b'orig').hexdigest()}  Graphics/base.png\n", encoding="utf-8")
+    assert content.validate(repo) == []
+    gfx.write_bytes(b"overwritten")
+    errors = content.validate(repo)
+    assert len(errors) == 1 and "Graphics/base.png" in errors[0] and "overwrites" in errors[0]
+    reg = repo / "docs" / "LICENSING_REGISTER.md"
+    reg.write_text(reg.read_text(encoding="utf-8")
+                   + "| Replacement | u | v | t | c | CLEARED | `game/Graphics/base.png` |\n", encoding="utf-8")
+    assert content.validate(repo) == []
+
+
+def test_trainer_without_pokemon_rejected(tmp_path):
+    repo = make_repo(tmp_path)
+    (repo / "game" / "PBS" / "trainers.txt").write_text("[LEADER,Rex]\nLoseText = x\n", encoding="utf-8")
+    errors = content.validate(repo)
+    assert len(errors) == 1 and "no Pokemon lines" in errors[0]
+
+
+def test_segment_map_without_encounters_rejected(tmp_path):
+    errors = content.validate(make_repo(tmp_path, maps=(7, 9)))
+    assert len(errors) == 1 and "map 9" in errors[0] and "no encounters" in errors[0]
+
+
+def test_unparseable_encounter_line_rejected(tmp_path):
+    repo = make_repo(tmp_path)
+    enc = repo / "game" / "PBS" / "encounters.txt"
+    enc.write_text(enc.read_text(encoding="utf-8") + "    50,TESTA\n", encoding="utf-8")
+    errors = content.validate(repo)
+    assert len(errors) == 1 and "cannot parse" in errors[0]

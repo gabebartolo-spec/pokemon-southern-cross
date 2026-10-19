@@ -11,6 +11,7 @@ Formats, taken from game/PBS (read the real files before changing this):
 
 Files start with a UTF-8 BOM; lines starting with `#` are comments.
 """
+import re
 from pathlib import Path
 
 
@@ -69,12 +70,11 @@ def read_trainers(path):
     return out
 
 
-def read_encounters(path):
-    """{map id (str): [(encounter type, species, min level, max level), ...]} from encounters.txt.
+_SLOT = re.compile(r"^\d+\s*,\s*[A-Z0-9_]+\s*,\s*\d+(\s*,\s*\d+)?$")
 
-    A map's versions (`[005,1]`) are merged under the map id.
-    """
-    out, current, etype = {}, None, None
+
+def _parse_encounters(path):
+    out, bad, current, etype = {}, [], None, None
     for line in _lines(path):
         h = _header(line)
         if h is not None:
@@ -83,10 +83,25 @@ def read_encounters(path):
             etype = None
         elif current is None:
             continue
-        elif line[0].isdigit() and line.split(",")[0].strip().isdigit() and etype is not None \
-                and len(line.split(",")) >= 3:
+        elif line[0].isdigit():  # a slot line: chance,SPECIES,minlevel[,maxlevel]
+            if etype is None or not _SLOT.match(line):
+                bad.append((current, line))
+                continue
             chance, species, lo, *hi = [p.strip() for p in line.split(",")]
             out[current].append((etype, species, int(lo), int(hi[0]) if hi else int(lo)))
         else:
             etype = line.split(",")[0].strip()
-    return out
+    return out, bad
+
+
+def read_encounters(path):
+    """{map id (str): [(encounter type, species, min level, max level), ...]} from encounters.txt.
+
+    A map's versions (`[005,1]`) are merged under the map id; leading zeros are dropped.
+    """
+    return _parse_encounters(path)[0]
+
+
+def bad_encounter_lines(path):
+    """[(map id, line)] for slot lines that do not parse (no encounter type, wrong shape)."""
+    return _parse_encounters(path)[1]

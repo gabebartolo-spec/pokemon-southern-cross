@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 """Fail if any suite ran fewer checks than its floor in tests/expected_checks.txt.
 
-Usage: check_floors.py <run log> [--floors <file>]
+Usage: check_floors.py <run log> [--floors <file>] [--base <file>]
+
+--base is the floors file of the base branch (ratchet): fail if any suite there is missing
+from the floors file or has a lower floor here.
 
 The log holds lines `SUITE <name> CHECKS <n>` (or `SUITE <name> SKIPPED`, which is ignored).
 The floors file holds lines `<suite> <floor>`; `#` starts a comment. A suite with a floor but
@@ -41,12 +44,25 @@ def main(argv):
         i = args.index("--floors")
         floors_path = Path(args[i + 1])
         del args[i:i + 2]
+    base_path = None
+    if "--base" in args:
+        i = args.index("--base")
+        base_path = Path(args[i + 1])
+        del args[i:i + 2]
     if len(args) != 1:
         print(__doc__)
         return 2
     floors = parse_floors(floors_path.read_text(encoding="utf-8"))
     counts, skipped = parse_log(Path(args[0]).read_text(encoding="utf-8", errors="replace"))
     failed = False
+    if base_path is not None:
+        for name, base_floor in sorted(parse_floors(base_path.read_text(encoding="utf-8")).items()):
+            if name not in floors:
+                print(f"FAIL {name}: floor removed (base has {base_floor})")
+                failed = True
+            elif floors[name] < base_floor:
+                print(f"FAIL {name}: floor lowered to {floors[name]} (base has {base_floor})")
+                failed = True
     for name, floor in sorted(floors.items()):
         if name in counts:
             ok = counts[name] >= floor

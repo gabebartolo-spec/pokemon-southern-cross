@@ -108,12 +108,26 @@ def added_files(root):
     return out
 
 
+def overwritten_assets(root):
+    """Base paths under Graphics/ or Audio/ whose bytes differ from the manifest hash."""
+    manifest = _manifest(root)
+    out = []
+    for rel, digest in sorted(manifest.items()):
+        if rel.startswith(("Graphics/", "Audio/")):
+            p = Path(root) / "game" / rel
+            if p.is_file() and _sha(p) != digest:
+                out.append(rel)
+    return out
+
+
 # ---- rules: each takes repo_root and returns a list of error strings ----
 
 def rule_trainers_listed_exist(root):
     known = pbs.read_trainers(Path(root) / "game/PBS/trainers.txt")
     return [f"{seg['id']}: trainer {t} is not in trainers.txt"
-            for seg in _segments(root) for t in seg["trainers"] if pbs.trainer_id(t) not in known]
+            for seg in _segments(root) for t in seg["trainers"] if pbs.trainer_id(t) not in known] +            [f"{seg['id']}: trainer {t} has no Pokemon lines"
+            for seg in _segments(root) for t in seg["trainers"]
+            if pbs.trainer_id(t) in known and not known[pbs.trainer_id(t)]]
 
 
 def rule_trainers_within_cap(root):
@@ -133,6 +147,16 @@ def _segment_encounters(root):
     for seg in _segments(root):
         for m in seg["maps"]:
             yield seg, str(int(m)), enc.get(str(int(m)), [])
+
+
+def rule_encounters_present_and_parsable(root):
+    enc = pbs.read_encounters(Path(root) / "game/PBS/encounters.txt")
+    errors = [f"{seg['id']}: map {m} has no encounters in encounters.txt"
+              for seg in _segments(root) for m in map(lambda x: str(int(x)), seg["maps"])
+              if not enc.get(m)]
+    return errors + [f"encounters.txt map {m}: cannot parse line {bad!r}"
+                     for m, bad in pbs.bad_encounter_lines(Path(root) / "game/PBS/encounters.txt")
+                     if m in {str(int(x)) for seg in _segments(root) for x in seg["maps"]}]
 
 
 def rule_encounters_within_cap(root):
@@ -173,10 +197,13 @@ def rule_added_files_registered(root):
     patterns = [_glob_re(g) for g in _register_globs(root)]
     return [f"game/{rel} is not in the base manifest and matches no Paths glob in "
             f"docs/LICENSING_REGISTER.md"
-            for rel in added_files(root) if not any(p.match(f"game/{rel}") for p in patterns)]
+            for rel in added_files(root) if not any(p.match(f"game/{rel}") for p in patterns)] +            [f"game/{rel} overwrites a base asset and matches no Paths glob in "
+            f"docs/LICENSING_REGISTER.md"
+            for rel in overwritten_assets(root) if not any(p.match(f"game/{rel}") for p in patterns)]
 
 
-RULES = [rule_trainers_listed_exist, rule_trainers_within_cap, rule_encounters_within_cap,
+RULES = [rule_trainers_listed_exist, rule_trainers_within_cap,
+         rule_encounters_present_and_parsable, rule_encounters_within_cap,
          rule_encounter_species_in_dex, rule_dex_sprites_exist, rule_dex_sprites_not_base,
          rule_added_files_registered]
 
