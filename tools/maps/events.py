@@ -223,35 +223,32 @@ def _item(o, props, where, ctx):
                                  page([], TRIGGERS["action"], "", self_switch="A")]
 
 
-def _ruby_single_quoted(text):
-    return "'%s'" % text.replace("\\", "\\\\").replace("'", "\\'")
-
-
 def _trainer(o, props, where, ctx):
+    if "lose" in props:
+        raise MapBuildError("%s: lose text belongs in PBS trainers.txt (LoseText), not the map" % where)
     spec = props.get("trainer")
-    if not isinstance(spec, str) or spec.count(",") < 1:
-        raise MapBuildError('%s: trainer must be "TYPE,Name" (e.g. "YOUNGSTER,Ben")' % where)
-    ttype, name = (part.strip() for part in spec.split(",", 1))
+    parts = [part.strip() for part in spec.split(",")] if isinstance(spec, str) else []
+    if len(parts) not in (2, 3) or (len(parts) == 3 and not parts[2].isdigit()):
+        raise MapBuildError('%s: trainer must be "TYPE,Name" or "TYPE,Name,version" (e.g. "YOUNGSTER,Ben")'
+                            % where)
+    ttype, name = parts[0], parts[1]
+    version = int(parts[2]) if len(parts) == 3 else None
     _symbol(ttype, "trainer type", where)
     if not name or UNSAFE_IN_RUBY_STRING.search(name):
         raise MapBuildError('%s: trainer name %r must be non-empty, without " \\ or #{' % (where, name))
-    if ctx is not None and not ctx.has_trainer(ttype, name):
-        raise MapBuildError("%s: trainer [%s,%s] is not in PBS/trainers.txt" % (where, ttype, name))
+    if ctx is not None and not ctx.has_trainer(ttype, name, version or 0):
+        raise MapBuildError("%s: trainer [%s] is not in PBS/trainers.txt" % (where, ",".join(parts)))
     sight = _int(props, "sight", where, minimum=1)
     direction = _choice(props, "direction", DIRECTIONS, "down", where, allowed=("down", "left", "right", "up"))
     doubles = props.get("doubles", False)
     if not isinstance(doubles, bool):
         raise MapBuildError("%s: doubles must be true or false" % where)
     intro = _text(props, "intro", where)
-    lose = _text(props, "lose", where, required=False)
-    after = _text(props, "after", where, required=False) or lose
+    after = _text(props, "after", where, required=False)
     graphic = TRAINER_GRAPHIC % ttype
     if ctx is not None and not ctx.has_character(graphic):
         raise MapBuildError("%s: graphic %r is not in game/Graphics/Characters" % (where, graphic))
-    if lose is None:
-        battle = 'TrainerBattle.start(:%s, "%s")' % (ttype, name)
-    else:  # Essentials' [type, name, version, lose text] form
-        battle = 'TrainerBattle.start([:%s, "%s", 0, %s])' % (ttype, name, _ruby_single_quoted(lose))
+    battle = 'TrainerBattle.start(:%s, "%s"%s)' % (ttype, name, "" if version is None else ", %d" % version)
     first = (_script(["pbTrainerIntro(:%s)" % ttype]) + _script(["pbNoticePlayer(get_self)"])
              + messages(intro) + (_script(['setBattleRule("double")']) if doubles else [])
              + _branch_then_switch(battle) + _script(["pbTrainerEnd"]))

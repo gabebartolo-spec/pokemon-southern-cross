@@ -407,3 +407,10 @@ def test_one_event_of_each_type_builds(tmp_path):
     assert [evs[i].ivars["@name"].text for i in sorted(evs)] == ["Gate", "Sign", "Bloke", "Ball", "Trainer(2)",
                                                                  "Check"]
     assert sorted(evs) == [1, 2, 3, 4, 5, 6] and all(evs[i].ivars["@id"] == i for i in evs)
+
+
+def test_trainer_version_checked_against_pbs(tmp_path):
+    ok = _obj(1, "Jeff", "trainer", 1, 1, trainer="CAMPER,Jeff,1", sight=2, intro="Rematch!")
+    build.map_from_tmj(_tmj(tmp_path, "901_small.tmj", objects=[ok]))
+    bad = _obj(1, "Jeff", "trainer", 1, 1, trainer="CAMPER,Jeff,7", sight=2, intro="Rematch!")
+    _raises(_tmj(tmp_path, "901_small.tmj", objects=[bad]), "901_small.tmj", "trainers.txt")

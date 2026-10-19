@@ -71,11 +71,12 @@ Text is written as authored: a blank line starts a new box, a newline continues 
 - `npc`: `graphic` (a file in `Graphics/Characters`), `text`, optional `direction` (down).
 - `item`: `item` (a PBS id, e.g. `POTION`), optional `quantity`. `pbItemBall`, then self
   switch A shows an empty page (Map005 event 11).
-- `trainer`: `trainer` (`"TYPE,Name"`, a section of PBS `trainers.txt`), `sight` (tiles),
-  `intro`, optional `lose`, `after`, `doubles`, `direction` (down). Named `Trainer(sight)`
-  (Essentials finds trainers by event name); page 1 `TrainerBattle.start`, self switch A
-  (Map031 event 4; `doubles` adds `setBattleRule("double")` as event 10); page 2 says `after`
-  (or `lose`). `lose` overrides the PBS LoseText via the `[type, name, 0, lose]` form.
+- `trainer`: `trainer` (`"TYPE,Name"` or `"TYPE,Name,version"`, a section of PBS
+  `trainers.txt`), `sight` (tiles), `intro`, optional `after`, `doubles`, `direction` (down).
+  Named `Trainer(sight)` (Essentials finds trainers by event name); page 1
+  `TrainerBattle.start(:TYPE, "Name")`, self switch A (Map031 event 4; `doubles` adds
+  `setBattleRule("double")` as event 10); page 2 says `after` (empty without it). Lose text
+  lives only in PBS `LoseText`: a `lose` property is an error.
 - `script`: `script` (Ruby lines: 355 then 655), optional `trigger` (action, player_touch,
   event_touch, autorun, parallel), `graphic`, `direction`.
 - `spawn`: an arrival or start point. Not built into an event; it must sit on a walkable cell

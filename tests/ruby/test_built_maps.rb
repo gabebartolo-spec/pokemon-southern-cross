@@ -128,7 +128,7 @@ class TestBuiltMaps < Minitest::Test
     assert_equal [2, false], [battle.trigger, battle.condition.self_switch_valid]
     assert_equal [355, 355, 101, 111, 123, 0, 412, 355, 0], codes(battle)
     assert_equal ["pbTrainerIntro(:YOUNGSTER)"], battle.list[0].parameters
-    assert_equal [12, %q{TrainerBattle.start([:YOUNGSTER, "Ben", 0, 'Aww, I lost.'])}], battle.list[3].parameters
+    assert_equal [12, 'TrainerBattle.start(:YOUNGSTER, "Ben")'], battle.list[3].parameters
     assert_equal ["trainer_YOUNGSTER", 6], [battle.graphic.character_name, battle.graphic.direction]
     assert_equal [0, true, ["Good battle, that."]], [after.trigger, after.condition.self_switch_valid,
                                                     after.list[0].parameters]

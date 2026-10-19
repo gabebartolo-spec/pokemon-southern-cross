@@ -239,10 +239,10 @@ class _Context:
     def has_item(self, item):
         return item in self._sections("items.txt")
 
-    def has_trainer(self, ttype, name):
+    def has_trainer(self, ttype, name, version=0):
         trainers = {tuple(part.strip() for part in sec.split(",")) for sec in self._sections("trainers.txt")}
-        return ttype in self._sections("trainer_types.txt") and (
-            (ttype, name) in trainers or (ttype, name, "0") in trainers)
+        wanted = {(ttype, name, str(version))} | ({(ttype, name)} if version == 0 else set())
+        return ttype in self._sections("trainer_types.txt") and bool(wanted & trainers)
 
     def has_character(self, graphic):
         if self.characters is None:

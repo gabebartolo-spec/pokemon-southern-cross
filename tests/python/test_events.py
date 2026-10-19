@@ -85,15 +85,18 @@ def test_unknown_type_rejected():
     assert events.MapBuildError is build.MapBuildError
 
 
-def test_trainer_lose_text_uses_the_engine_speech_argument():
-    ev = events.build(o("Kid", "trainer", trainer="YOUNGSTER,Ben", sight=3, intro="Oi!",
-                        lose="You're good, mate. Don't tell \\PN I said so."))
-    assert ev.ivars["@name"].text == "Trainer(3)"
+def test_trainer_lose_text_rejected():
+    # Lose text lives only in PBS trainers.txt (LoseText); the map must not carry its own.
+    with pytest.raises(events.MapBuildError) as e:
+        events.build(o("Kid", "trainer", trainer="YOUNGSTER,Ben", sight=3, intro="Oi!", lose="Aww."))
+    assert "PBS trainers.txt" in str(e.value) and "Kid" in str(e.value)
+
+
+def test_trainer_version_is_passed_as_in_the_base_form():
+    ev = events.build(o("Jeff", "trainer", trainer="CAMPER,Jeff,1", sight=2, intro="Rematch!"))
+    assert ev.ivars["@name"].text == "Trainer(2)"
     branch = [c for c in commands(ev) if c[1] == 111][0]
-    assert branch[2] == [12, "TrainerBattle.start([:YOUNGSTER, \"Ben\", 0, "
-                             "'You\\'re good, mate. Don\\'t tell \\\\PN I said so.'])"]
-    # With no after-battle line, the trainer repeats the lose line when talked to again.
-    assert commands(ev, 1)[0] == (0, 101, ["You're good, mate. Don't tell \\PN I said so."])
+    assert branch[2] == [12, 'TrainerBattle.start(:CAMPER, "Jeff", 1)']
 
 
 def test_trainer_with_nothing_to_say_after_has_an_empty_second_page():
@@ -103,7 +106,8 @@ def test_trainer_with_nothing_to_say_after_has_an_empty_second_page():
     assert [c for c in commands(ev) if c[1] == 111][0][2][1] == 'TrainerBattle.start(:YOUNGSTER, "Ben")'
 
 
-@pytest.mark.parametrize("spec", ["YOUNGSTER", "youngster,Ben", "YOUNGSTER,", 'YOUNGSTER,Be"n', "YOUNGSTER,#{x}"])
+@pytest.mark.parametrize("spec", ["YOUNGSTER", "youngster,Ben", "YOUNGSTER,", 'YOUNGSTER,Be"n', "YOUNGSTER,#{x}",
+                                  "YOUNGSTER,Ben,one", "YOUNGSTER,Ben,1,2"])
 def test_bad_trainer_spec_rejected(spec):
     with pytest.raises(events.MapBuildError):
         events.build(o("Kid", "trainer", trainer=spec, sight=2, intro="Oi!"))
