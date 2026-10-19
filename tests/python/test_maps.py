@@ -308,3 +308,102 @@ def test_committed_data_matches_content(tmp_path):
     build.build_all(ROOT / "content", data)
     for p in data.iterdir():
         assert p.read_bytes() == (DATA / p.name).read_bytes(), p.name
+
+
+# ---------------------------------------------------------------- events: cross references (Task 10)
+
+def _raises(p, *names):
+    with pytest.raises(build.MapBuildError) as e:
+        build.map_from_tmj(p)
+    for n in names:
+        assert n in str(e.value), (n, str(e.value))
+    return str(e.value)
+
+
+def test_warp_arrival_must_be_walkable_on_content_map(tmp_path):
+    ground = [10] * 9
+    ground[2 * 3 + 2] = 9  # gid 9 = RMXP 384, passage 15
+    _tmj(tmp_path, "902_other.tmj", w=3, h=3, ground=ground)
+    ok = _tmj(tmp_path, "901_small.tmj", objects=[_obj(1, "Next", "warp", 0, 0, target_map=902,
+                                                          target_x=1, target_y=1)])
+    assert len(build.map_from_tmj(ok).ivars["@events"]) == 1
+    bad = _tmj(tmp_path, "901_small.tmj", objects=[_obj(1, "Into the wall", "warp", 0, 0, target_map=902,
+                                                           target_x=2, target_y=2)])
+    assert "not walkable" in _raises(bad, "901_small.tmj", "Into the wall")
+
+
+def test_warp_arrival_must_be_walkable_on_base_map(tmp_path):
+    ok = _tmj(tmp_path, "901_small.tmj", objects=[_obj(1, "Home", "warp", 0, 0, target_map=2,
+                                                          target_x=8, target_y=7)])
+    build.map_from_tmj(ok)  # onto the Lappet Town door, as base Map003's exit does
+    bad = _tmj(tmp_path, "901_small.tmj", objects=[_obj(1, "Tower wall", "warp", 0, 0, target_map=59,
+                                                           target_x=2, target_y=8)])
+    _raises(bad, "901_small.tmj", "Tower wall", "not walkable")
+
+
+# Base warps whose arrival cell is a wall: Battle Frontier cutscene starts (the player is moved
+# off by a script). Every other base warp lands on a cell the walkable rule accepts.
+SCRIPTED_ARRIVALS = {(59, 2, 8), (63, 4, 9), (64, 2, 9)}
+
+
+def test_base_warps_land_on_walkable_cells():
+    ctx = build._Context(ROOT / "content" / "maps", DATA)
+    checked = 0
+    for mid in sorted(build.BASE_MAP_IDS):
+        for ev in load(DATA / ("Map%03d.rxdata" % mid)).ivars["@events"].values():
+            for page in ev.ivars["@pages"]:
+                for c in page.ivars["@list"]:
+                    p = c.ivars["@parameters"]
+                    if c.ivars["@code"] != 201 or p[0] != 0 or ctx.size(p[1]) is None:
+                        continue
+                    checked += 1
+                    assert ctx.walkable(p[1], p[2], p[3]) == (tuple(p[1:4]) not in SCRIPTED_ARRIVALS), (mid, p)
+    assert checked == 168
+
+
+@pytest.mark.parametrize("source", ["../maps/outside.json", "../../tilesets/outside.json", "../tilesets/missing.json",
+                                    "../tilesets/outside.tsx"])
+def test_tileset_source_must_be_in_content_tilesets(tmp_path, source):
+    p = _tmj(tmp_path, "901_small.tmj")
+    shutil.copy(tmp_path / "content" / "tilesets" / "outside.json", tmp_path / "content" / "maps" / "outside.json")
+    (tmp_path / "tilesets").mkdir()
+    shutil.copy(tmp_path / "content" / "tilesets" / "outside.json", tmp_path / "tilesets" / "outside.json")
+    doc = json.loads(p.read_text(encoding="utf-8"))
+    doc["tilesets"][0]["source"] = source
+    p.write_text(json.dumps(doc), encoding="utf-8")
+    _raises(p, "901_small.tmj", "content/tilesets")
+
+
+@pytest.mark.parametrize("width", ["5", None, 0, True, 2.5])
+def test_malformed_size_in_any_content_map_rejected(tmp_path, width):
+    other = _tmj(tmp_path, "902_other.tmj", w=3, h=3)
+    doc = json.loads(other.read_text(encoding="utf-8"))
+    doc["width"] = width
+    other.write_text(json.dumps(doc), encoding="utf-8")
+    p = _tmj(tmp_path, "901_small.tmj")
+    _raises(p, "902_other.tmj", "width and height")
+    p.write_text(json.dumps(doc), encoding="utf-8")
+    _raises(p, "901_small.tmj", "width and height")
+
+
+@pytest.mark.parametrize("obj, fault", [
+    (_obj(1, "Ball", "item", 1, 1, item="MADEUPITEM"), "items.txt"),
+    (_obj(1, "Kid", "trainer", 1, 1, trainer="YOUNGSTER,Nobody", sight=2, intro="Oi!"), "trainers.txt"),
+    (_obj(1, "Kid", "trainer", 1, 1, trainer="NOTATYPE,Ben", sight=2, intro="Oi!"), "trainers.txt"),
+    (_obj(1, "Bloke", "npc", 1, 1, graphic="NPC 99", text="G'day."), "Graphics/Characters"),
+])
+def test_event_cross_references_checked(tmp_path, obj, fault):
+    _raises(_tmj(tmp_path, "901_small.tmj", objects=[obj]), "901_small.tmj", fault)
+
+
+def test_one_event_of_each_type_builds(tmp_path):
+    objs = [_obj(1, "Gate", "warp", 0, 0, target_map=2, target_x=8, target_y=7),
+            _obj(2, "Sign", "sign", 1, 0, text="Route 1"),
+            _obj(3, "Bloke", "npc", 2, 0, graphic="NPC 01", text="G'day."),
+            _obj(4, "Ball", "item", 3, 0, item="POTION"),
+            _obj(5, "Kid", "trainer", 4, 0, trainer="YOUNGSTER,Ben", sight=2, intro="Oi!"),
+            _obj(6, "Check", "script", 0, 1, script="pbHealAll")]
+    evs = build.map_from_tmj(_tmj(tmp_path, "901_small.tmj", objects=objs)).ivars["@events"]
+    assert [evs[i].ivars["@name"].text for i in sorted(evs)] == ["Gate", "Sign", "Bloke", "Ball", "Trainer(2)",
+                                                                 "Check"]
+    assert sorted(evs) == [1, 2, 3, 4, 5, 6] and all(evs[i].ivars["@id"] == i for i in evs)

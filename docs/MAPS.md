@@ -15,7 +15,8 @@ python tools/maps/export_tmj.py 2       # base Map002 -> content/maps/002_<slug>
 
 - Name: `content/maps/<map_id>_<slug>.tmj`, id 1..999, slug `a-z 0-9 _` (`900_builder_test.tmj`).
   An id that belongs to a base Essentials map is rejected unless the map sets `replaces_base: true`.
-- Fixed size, 32x32 tiles, one tileset given by `source` (`../tilesets/<name>.json`).
+- Fixed size, 32x32 tiles, one tileset given by `source`, a json in `content/tilesets`
+  (`../tilesets/<name>.json`).
 - Layers: three tile layers `ground`, `mid`, `top` (RMXP layers 0, 1, 2) as plain number lists,
   and one object layer `events`. Any other layer is an error; flipped tiles are an error.
 - Map properties (all optional): `name` (shown in MapInfos; default the slug), `parent_id`,
@@ -56,17 +57,33 @@ authored as text by agents and checked by the builder; previews come from the bu
 
 ## Objects (`events` layer)
 
-Rectangles; the cell is `floor(x/32), floor(y/32)`. Object `type` (or Tiled `class`):
+Rectangles; the cell is `floor(x/32), floor(y/32)`. Object `type` (or Tiled `class`). Each
+type copies a real base event (`tools/maps/events.py`; fixtures in `tests/fixtures/events/`).
+Text is written as authored: a blank line starts a new box, a newline continues the box.
 
-- `warp`: properties `target_map`, `target_x`, `target_y` (ints), optional `direction`
-  (retain, down, left, right, up) and `sound` (an SE, e.g. `Door exit`). Built as a
-  player-touch event in Essentials' own door pattern: fade out, wait, transfer, fade in. The
-  target map must be a content map or a base map, and the target cell inside it.
+- `warp`: `target_map`, `target_x`, `target_y` (ints), optional `direction` (retain, down,
+  left, right, up) and `sound` (an SE, e.g. `Door exit`). Player touch; fade out, wait,
+  transfer, fade in (base Map003 event 1). The target must be a content or base map and the
+  arrival cell inside it and walkable (rule below; 157 of 168 base warps pass, the other 11 are
+  Battle Frontier cutscene starts).
+- `sign`: `text`. No graphic, action button (Map049 event 9). Skin codes such as
+  `\w[signskin]` are part of the text if wanted.
+- `npc`: `graphic` (a file in `Graphics/Characters`), `text`, optional `direction` (down).
+- `item`: `item` (a PBS id, e.g. `POTION`), optional `quantity`. `pbItemBall`, then self
+  switch A shows an empty page (Map005 event 11).
+- `trainer`: `trainer` (`"TYPE,Name"`, a section of PBS `trainers.txt`), `sight` (tiles),
+  `intro`, optional `lose`, `after`, `doubles`, `direction` (down). Named `Trainer(sight)`
+  (Essentials finds trainers by event name); page 1 `TrainerBattle.start`, self switch A
+  (Map031 event 4; `doubles` adds `setBattleRule("double")` as event 10); page 2 says `after`
+  (or `lose`). `lose` overrides the PBS LoseText via the `[type, name, 0, lose]` form.
+- `script`: `script` (Ruby lines: 355 then 655), optional `trigger` (action, player_touch,
+  event_touch, autorun, parallel), `graphic`, `direction`.
 - `spawn`: an arrival or start point. Not built into an event; it must sit on a walkable cell
   (Essentials' `playerPassable?`: top layer down, skip empty, neutral and bridge tiles, passage
   15 blocks, priority 0 decides).
 
-Any other type is an error. Errors name the file, the object and the cell.
+Items, trainer types, trainers and graphics are checked against `game/PBS` and
+`game/Graphics/Characters`. Any other type is an error. Errors name the file and the object.
 
 ## What the builder guarantees
 

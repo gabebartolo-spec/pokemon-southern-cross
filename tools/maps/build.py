@@ -8,20 +8,22 @@ Same input, same bytes. Conventions are in docs/MAPS.md.
 """
 import json
 import re
-import struct
 import sys
 from pathlib import Path
 
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from tools.maps import autotile  # noqa: E402
+from tools.maps import autotile, events  # noqa: E402
+from tools.maps.events import EVENT_IVARS, PAGE_IVARS, MapBuildError, audio as _audio, obj, s  # noqa: E402,F401
 from tools.rmxp import rpg  # noqa: E402
-from tools.rmxp.marshal import RHash, RString, RubyObject, UserDef, dumps, loads  # noqa: E402
+from tools.rmxp.marshal import RHash, dumps, loads  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = ROOT / "game" / "Data"
 CONTENT_DIR = ROOT / "content"
+PBS_DIR = ROOT / "game" / "PBS"
+CHARACTERS_DIR = ROOT / "game" / "Graphics" / "Characters"
 
 # Essentials v21.1 base content: these entries are never rewritten.
 BASE_MAP_IDS = frozenset((
@@ -37,18 +39,11 @@ AUTOTILE_SLOTS = 7
 FIRST_TILESET_LOCAL = 8  # local ids: 0 blank, 1..7 autotile key, 8+ tileset tiles
 TERRAIN_NEUTRAL, TERRAIN_BRIDGE = 13, 15  # Essentials tags that skip tile passability
 FLIP_BITS = 0xF0000000
-DIRECTIONS = {"retain": 0, "down": 2, "left": 4, "right": 6, "up": 8}
-TONE_BLACK, TONE_CLEAR = (-255.0, -255.0, -255.0, 0.0), (0.0, 0.0, 0.0, 0.0)
-FADE_FRAMES, WARP_WAIT_FRAMES = 6, 8
-TRIGGER_PLAYER_TOUCH = 1
 
 # Ivar orders as stored by the base files (the most common order where files differ).
 MAP_IVARS = ["@bgm", "@events", "@tileset_id", "@bgs", "@autoplay_bgm", "@data", "@autoplay_bgs",
              "@height", "@encounter_step", "@width", "@encounter_list"]
-EVENT_IVARS = ["@pages", "@name", "@y", "@x", "@id"]
-PAGE_IVARS = ["@move_type", "@list", "@condition", "@direction_fix", "@move_route", "@trigger",
-              "@step_anime", "@move_frequency", "@graphic", "@always_on_top", "@walk_anime",
-              "@move_speed", "@through"]
+# EVENT_IVARS and PAGE_IVARS live in tools/maps/events.py.
 MAPINFO_IVARS = ["@scroll_x", "@name", "@expanded", "@order", "@scroll_y", "@parent_id"]
 TILESET_IVARS = ["@terrain_tags", "@panorama_hue", "@fog_sy", "@name", "@fog_opacity", "@priorities",
                  "@panorama_name", "@fog_sx", "@fog_hue", "@passages", "@autotile_names", "@fog_zoom",
@@ -59,18 +54,6 @@ TILESET_EXTRAS = {"panorama_name": "", "panorama_hue": 0, "fog_name": "", "fog_h
                   "battleback_name": ""}
 
 MAP_FILE = re.compile(r"^(\d{1,3})_([a-z0-9_]+)\.tmj$")
-
-
-class MapBuildError(Exception):
-    pass
-
-
-def s(text):
-    return RString.utf8(text)
-
-
-def obj(cls, ivars):
-    return RubyObject(cls, dict(ivars))
 
 
 # ---------------------------------------------------------------- tilesets
@@ -161,13 +144,7 @@ def walkable(tables, tiles, x, y):
 # ---------------------------------------------------------------- tmj reading
 
 def _props(items, where):
-    out = {}
-    for p in items or []:
-        try:
-            out[p["name"]] = p["value"]
-        except (KeyError, TypeError):
-            raise MapBuildError("%s: malformed property %r" % (where, p))
-    return out
+    return events.props_of({"properties": items}, where)
 
 
 def _read_tmj(path):
@@ -185,8 +162,29 @@ def map_id_of(path):
     return int(m.group(1))
 
 
+def _size_of(doc, path):
+    """A tmj's (width, height); MapBuildError naming the file unless both are positive ints."""
+    w, h = doc.get("width"), doc.get("height")
+    ok = all(isinstance(v, int) and not isinstance(v, bool) and v > 0 for v in (w, h))
+    if not ok or doc.get("infinite"):
+        raise MapBuildError("%s: needs a fixed positive width and height" % Path(path).name)
+    return w, h
+
+
+SECTION = re.compile(r"^\[([^\]]+)\]", re.M)
+
+
+def _pbs_sections(name):
+    try:
+        text = (PBS_DIR / name).read_text(encoding="utf-8-sig")
+    except OSError as e:
+        raise MapBuildError("cannot read game/PBS/%s: %s" % (name, e))
+    return {m.group(1).strip() for m in SECTION.finditer(text)}
+
+
 class _Context:
-    """Map sizes for warp checks: content maps beside the tmj, then base maps in data_dir."""
+    """Cross references for events: map sizes and walkable cells (content maps beside the tmj,
+    then base maps in data_dir), PBS items and trainers, character graphics."""
 
     def __init__(self, content_maps_dir, data_dir):
         self.content = {}
@@ -195,29 +193,76 @@ class _Context:
                 mid = map_id_of(p)
             except MapBuildError:
                 continue
-            d = _read_tmj(p)
-            self.content[mid] = (d.get("width"), d.get("height"))
+            self.content[mid] = p
+        self.sizes = {mid: _size_of(_read_tmj(p), p) for mid, p in self.content.items()}
         self.data_dir = Path(data_dir)
         self.base = {}
+        self.cells = {}
+        self.pbs = {}
+        self.characters = None
 
     def size(self, mid):
-        if mid in self.content:
-            return self.content[mid]
+        if mid in self.sizes:
+            return self.sizes[mid]
         if mid not in self.base:
             f = self.data_dir / ("Map%03d.rxdata" % mid)
-            if mid not in BASE_MAP_IDS or not f.is_file():
-                self.base[mid] = None
+            self.base[mid] = loads(f.read_bytes()) if mid in BASE_MAP_IDS and f.is_file() else None
+        m = self.base[mid]
+        return None if m is None else (m.ivars["@width"], m.ivars["@height"])
+
+    def _cells(self, mid):
+        """(tables, tiles) of a map: from its tmj and tileset json, or base data and Tilesets."""
+        if mid not in self.cells:
+            if mid in self.content:
+                p = self.content[mid]
+                doc = _read_tmj(p)
+                w, h = _size_of(doc, p)
+                ts, firstgid = _tileset_for(doc, p)
+                self.cells[mid] = (ts.tables(), _tile_layers(doc, p, w, h, ts, firstgid))
             else:
-                m = loads(f.read_bytes())
-                self.base[mid] = (m.ivars["@width"], m.ivars["@height"])
-        return self.base[mid]
+                self.size(mid)
+                m = self.base[mid]
+                ts = loads((self.data_dir / "Tilesets.rxdata").read_bytes())[m.ivars["@tileset_id"]]
+                tables = tuple(rpg.Table.from_userdef(ts.ivars[k]).data
+                               for k in ("@passages", "@priorities", "@terrain_tags"))
+                self.cells[mid] = (tables, rpg.Table.from_userdef(m.ivars["@data"]))
+        return self.cells[mid]
+
+    def walkable(self, mid, x, y):
+        return walkable(*self._cells(mid), x, y)
+
+    def _sections(self, name):
+        if name not in self.pbs:
+            self.pbs[name] = _pbs_sections(name)
+        return self.pbs[name]
+
+    def has_item(self, item):
+        return item in self._sections("items.txt")
+
+    def has_trainer(self, ttype, name):
+        trainers = {tuple(part.strip() for part in sec.split(",")) for sec in self._sections("trainers.txt")}
+        return ttype in self._sections("trainer_types.txt") and (
+            (ttype, name) in trainers or (ttype, name, "0") in trainers)
+
+    def has_character(self, graphic):
+        if self.characters is None:
+            self.characters = {p.stem for p in CHARACTERS_DIR.glob("*.png")}
+        return graphic in self.characters
 
 
 def _tileset_for(doc, path):
     sets = doc.get("tilesets") or []
-    if len(sets) != 1 or "source" not in sets[0]:
+    if len(sets) != 1 or not isinstance(sets[0], dict) or not isinstance(sets[0].get("source"), str):
         raise MapBuildError("%s: needs exactly one tileset, by source path to content/tilesets" % path.name)
-    return Tileset((path.parent / sets[0]["source"]).resolve()), int(sets[0].get("firstgid", 1))
+    home = (path.parent.parent / "tilesets").resolve()
+    source = (path.parent / sets[0]["source"]).resolve()
+    if source.parent != home or source.suffix != ".json" or not source.is_file():
+        raise MapBuildError("%s: tileset source %r is not a json file in content/tilesets"
+                            % (path.name, sets[0]["source"]))
+    firstgid = sets[0].get("firstgid", 1)
+    if not isinstance(firstgid, int) or isinstance(firstgid, bool) or firstgid < 1:
+        raise MapBuildError("%s: tileset firstgid must be a positive integer" % path.name)
+    return Tileset(source), firstgid
 
 
 def _tile_layers(doc, path, w, h, ts, firstgid):
@@ -263,92 +308,32 @@ def _tile_layers(doc, path, w, h, ts, firstgid):
 
 # ---------------------------------------------------------------- events
 
-def _audio(name, volume, pitch):
-    return obj("RPG::AudioFile", [("@volume", int(volume)), ("@name", s(name)), ("@pitch", int(pitch))])
-
-
-def _cmd(code, params, indent=0):
-    return obj("RPG::EventCommand", [("@parameters", params), ("@indent", indent), ("@code", code)])
-
-
-def _tone(rgbg):
-    return UserDef("Tone", struct.pack("<4d", *rgbg))
-
-
-def _page(commands, trigger):
-    condition = obj("RPG::Event::Page::Condition", [
-        ("@switch2_valid", False), ("@self_switch_ch", s("A")), ("@switch1_id", 1),
-        ("@switch1_valid", False), ("@variable_value", 0), ("@self_switch_valid", False),
-        ("@variable_id", 1), ("@variable_valid", False), ("@switch2_id", 1)])
-    route = obj("RPG::MoveRoute", [("@list", [obj("RPG::MoveCommand", [("@parameters", []), ("@code", 0)])]),
-                                   ("@skippable", False), ("@repeat", True)])
-    graphic = obj("RPG::Event::Page::Graphic", [
-        ("@opacity", 255), ("@character_name", s("")), ("@pattern", 0), ("@tile_id", 0),
-        ("@direction", 2), ("@blend_type", 0), ("@character_hue", 0)])
-    v = {"@move_type": 0, "@list": commands + [_cmd(0, [])], "@condition": condition,
-         "@direction_fix": False, "@move_route": route, "@trigger": trigger, "@step_anime": False,
-         "@move_frequency": 3, "@graphic": graphic, "@always_on_top": False, "@walk_anime": True,
-         "@move_speed": 3, "@through": False}
-    return obj("RPG::Event::Page", [(k, v[k]) for k in PAGE_IVARS])
-
-
-def _int_prop(props, key, where):
-    v = props.get(key)
-    if not isinstance(v, int) or isinstance(v, bool):
-        raise MapBuildError("%s: needs integer property %s" % (where, key))
-    return v
-
-
-def _warp_commands(props, where, ctx):
-    target = _int_prop(props, "target_map", where)
-    tx, ty = _int_prop(props, "target_x", where), _int_prop(props, "target_y", where)
-    size = ctx.size(target)
-    if size is None:
-        raise MapBuildError("%s: warp target map %d does not exist" % (where, target))
-    if not (0 <= tx < size[0] and 0 <= ty < size[1]):
-        raise MapBuildError("%s: warp target (%d,%d) is outside map %d (%dx%d)"
-                            % (where, tx, ty, target, size[0], size[1]))
-    direction = props.get("direction", "retain")
-    if direction not in DIRECTIONS:
-        raise MapBuildError("%s: direction must be one of %s" % (where, ", ".join(DIRECTIONS)))
-    cmds = []
-    if props.get("sound"):
-        cmds.append(_cmd(250, [_audio(props["sound"], 80, 100)]))
-    cmds += [_cmd(223, [_tone(TONE_BLACK), FADE_FRAMES]), _cmd(106, [WARP_WAIT_FRAMES]),
-             _cmd(201, [0, target, tx, ty, DIRECTIONS[direction], 1]),
-             _cmd(223, [_tone(TONE_CLEAR), FADE_FRAMES])]
-    return cmds
-
-
 def _events(doc, path, w, h, tiles, ts, ctx):
+    """Hash{id => RPG::Event} from the events layer; ids run 1, 2, ... in object id order."""
     objects = []
     for layer in doc.get("layers", []):
         if layer.get("type") == "objectgroup" and layer.get("name") == EVENT_LAYER:
             objects = sorted(layer.get("objects", []), key=lambda o: o.get("id", 0))
-    events = RHash()
+    out = RHash()
     tables = ts.tables()
     for o in objects:
         name = o.get("name") or ""
         where = "%s object %r (id %s)" % (path.name, name, o.get("id"))
-        kind = o.get("type") or o.get("class") or ""
         if "gid" in o:
             raise MapBuildError("%s: tile objects are not supported; use a rectangle" % where)
-        x, y = int(o.get("x", 0)) // TILE, int(o.get("y", 0)) // TILE
+        try:
+            x, y = events.cell(o)
+        except MapBuildError:
+            raise MapBuildError("%s: x and y must be numbers" % where)
         if not (0 <= x < w and 0 <= y < h):
             raise MapBuildError("%s: at (%d,%d), outside the map" % (where, x, y))
-        props = _props(o.get("properties"), where)
-        if kind == "spawn":
+        if (o.get("type") or o.get("class")) == "spawn":
             if not walkable(tables, tiles, x, y):
                 raise MapBuildError("%s: spawn at (%d,%d) is on an impassable tile" % (where, x, y))
             continue
-        if kind == "warp":
-            page = _page(_warp_commands(props, where, ctx), TRIGGER_PLAYER_TOUCH)
-        else:
-            raise MapBuildError("%s: unknown object type %r (warp or spawn)" % (where, kind))
-        eid = len(events) + 1
-        events[eid] = obj("RPG::Event", [("@pages", [page]), ("@name", s(name)), ("@y", y), ("@x", x),
-                                         ("@id", eid)])
-    return events
+        eid = len(out) + 1
+        out[eid] = events.build(o, eid, ctx, where)
+    return out
 
 
 # ---------------------------------------------------------------- maps
@@ -357,9 +342,7 @@ def map_from_tmj(path, data_dir=None):
     """RubyObject('RPG::Map') for a content/maps/*.tmj file; raises MapBuildError."""
     path = Path(path)
     doc = _read_tmj(path)
-    w, h = doc.get("width"), doc.get("height")
-    if not (isinstance(w, int) and isinstance(h, int) and w > 0 and h > 0) or doc.get("infinite"):
-        raise MapBuildError("%s: needs a fixed positive width and height" % path.name)
+    w, h = _size_of(doc, path)
     if doc.get("tilewidth", TILE) != TILE or doc.get("tileheight", TILE) != TILE:
         raise MapBuildError("%s: tiles must be 32x32" % path.name)
     ts, firstgid = _tileset_for(doc, path)
