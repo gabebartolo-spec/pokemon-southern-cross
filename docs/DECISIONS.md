@@ -6,6 +6,12 @@ changes. Only the merge role edits this file, from the "Board and log" section o
 D-001 to D-023 match D1 to D23 in the design spec
 (`docs/superpowers/specs/2026-10-19-southern-cross-design.md`).
 
+## 2026-10-19 · D-042 · Director · Kit's reason, Route 2's birds and Dusty's badge (interview)
+- **Kit:** drawn into Firebreak because Kit's family lost their farm when an introduced Pokémon (a Bunnelby plague, like Australia's rabbit plagues) dug it to dust and nobody helped; Firebreak did.
+- **Route 2:** Firebreak nets introduced Pidgey.
+- **Gym 1:** Dusty gives the Scale Badge with TM Dragon Tail.
+Still open: the Mistwood Bug gym leader; the name of Firebreak's leader.
+
 ## 2026-10-19 · D-041 · Director · Starter designs
 - Koala line: the baby is a joey asleep on a gum leaf it uses as a blanket, the leaf's oil hinting at Poison; then a regional Komala; then a big old-growth koala whose log has become a living, flowering gum branch, with a toxic oil mist (a slow, bulky Grass/Poison).
 - Ekans line: an inland taipan of the red centre with ember-red scales; the third stage is a huge Fire/Ground serpent that swims through hot red sand.

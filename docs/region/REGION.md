@@ -42,7 +42,7 @@ Wild levels and trainers rise with each leg; the regional dex placement comes la
 2. **Route 1** (coastal heath). Banksia scrub and dunes behind the beach; the first catches.
 3. **Route 2** (tall gum forest). A forest track that crosses a creek at the ford and climbs
    toward the hills; the first route trainers and the first sighting of Team Firebreak,
-   netting introduced birds (D-039).
+   netting introduced Pidgey (D-039, D-042).
 4. **Wattlebrook, Gym 1: Dragon.** A timber town under huge old gum trees, home to a reptile
    park where the gym leader, Dusty, is the keeper (D-032). *End of the first-gym slice.*
 5. **Route 3** (hinterland farms to the coast road). Dairy country down to the sea.
@@ -113,7 +113,7 @@ every leader's full team and ace (D-036); only Dusty's is decided so far.
 
 | Town | Type | Leader | Level cap | Ace |
 |------|------|--------|-----------|-----|
-| Wattlebrook | Dragon (reptile Pokémon) | Dusty, keeper of the reptile park | **14** | Gible 14 (team: Larvitar 12, Totodile 13, Gible 14; D-037) |
+| Wattlebrook | Dragon (reptile Pokémon) | Dusty, keeper of the reptile park | **14** | Gible 14 (team: Larvitar 12, Totodile 13, Gible 14; D-037); Scale Badge, TM Dragon Tail (D-042) |
 | Port Halyard | Water | Marlo, captain of the harbour surf club | 21 | Director to pick |
 | Snowgum Heights | Ice | Inge, head of the ski patrol | 28 | Director to pick |
 | Mallee Downs | Fire | Kel, captain of the volunteer fire brigade | 35 | Director to pick |

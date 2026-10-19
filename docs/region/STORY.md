@@ -2,11 +2,11 @@
 
 Cap: 200 lines
 
-Status: Story facts decided by the director (D-033, D-039); dialogue is a draft for his edit.
+Status: Story facts decided by the director (D-033, D-039, D-042); dialogue is a draft for his edit.
 Places are in [REGION.md](REGION.md). Binding: D-010 (classic story, darker villain with a real
 motive and stakes), D-011 (Mega Evolution only), D-030 (Team Firebreak; the player is a
 newcomer), D-034 and D-041 (starters), D-035 (new names), D-036 and D-037 (major teams),
-D-039 (the interview answers).
+D-039 and D-042 (the interview answers).
 
 ## The heart of it
 
@@ -28,8 +28,8 @@ has to answer them with the team they built.
 - **Team Firebreak, the villains.** A former chief ranger's team that wants to drive out every
   Pokémon and person "not born of the land".
 
-**To ask the director:** what draws Kit into Firebreak? (The earlier draft gave Kit a family
-farm lost to Bunnelby; that was never his answer, so it is removed.)
+- **Why Kit is drawn in (D-042).** Kit's family lost their farm when a Bunnelby plague (like
+  Australia's rabbit plagues) dug it to dust. Nobody helped. Firebreak did.
 
 **To ask the director:** what is the name of Firebreak's leader, the former chief ranger?
 
@@ -39,14 +39,15 @@ Everything in this section is Claude's earlier outline, kept only so the slice h
 lead. None of it is decided; it is replaced when the director is interviewed on the full story
 (D-033). Gym leaders' teams are his to pick (D-036).
 
-1. **Wattlebrook (Dragon).** Decided: on Route 2 Firebreak grunts net introduced birds. The
+1. **Wattlebrook (Dragon).** Decided: on Route 2 Firebreak grunts net introduced Pidgey. The
    player stops them. Dusty, the gym leader, has no time for them.
 2. **Port Halyard (Water).** Firebreak's leader speaks at a rally on the harbour steps: calm,
    reasonable, applauded. Kit is moved.
 3. **Snowgum Heights (Ice).** Firebreak drives the wild herds of the high plains toward a cliff.
    Inge's ski patrol and the player turn the stampede.
 4. **Mallee Downs (Fire).** A Firebreak burn-off turns with the wind and runs at the town. The
-   player helps Kel's brigade save it. Kit joins Firebreak.
+   player helps Kel's brigade save it. Kit joins Firebreak (decided: because Firebreak
+   helped Kit's family when nobody else did, D-042; where and when Kit joins is the draft).
 5. **Opal Hollow (Rock).** Hettie shows the player Mega Stones in the opal seams; Professor Gum
    brings the Mega Ring.
 6. **Westhaven, then Ironvale (Steel).** The player finds Firebreak's holding yards: cages of
@@ -128,26 +129,23 @@ On the lawn outside, wind snapping the station's flag.
 
 ### Slice scene 4: the first Firebreak sighting (Route 2, by the ford)
 
-A net is strung between two gum trees, with introduced birds tangled in it. Two Firebreak
+A net is strung between two gum trees, with introduced Pidgey tangled in it. Two Firebreak
 grunts are folding a cage.
 - GRUNT 1: Keep walking. Firebreak business.
-- GRUNT 2: These birds came in on the ships, years back. They've pushed the little native birds
+- GRUNT 2: These Pidgey came in on the ships, years back. They've pushed the little native birds
   right out of this gully. Someone has to do something.
 - GRUNT 1: We look after the land. Not born of it, not welcome on it. Now move along.
 - If the player talks to them again, GRUNT 1: You want to argue? Go on, then.
 - Battle: Firebreak grunt (two Pokémon).
-- GRUNT 1 (beaten): Fine. Keep your birds. One day you'll look round and wonder where all the
+- GRUNT 1 (beaten): Fine. Keep your Pidgey. One day you'll look round and wonder where all the
   native ones went.
 - GRUNT 2: And you're not from round here either, are you? Come on. Plenty more gullies.
-They cut the net and leave. The birds fly off. Kit jogs up the track.
-- KIT: Was that Firebreak? I've seen their posters in town. They reckon they're looking after the place.
-- KIT: Someone's got to, right? The Cove's changed heaps since I was little.
-- Choice: **"They were hurting those birds."** / **"Maybe they've got a point."**
+They cut the net and leave. The Pidgey fly off. Kit jogs up the track.
+- KIT: Was that Firebreak? They helped my family once. More than anyone else ever did.
+- KIT: We had a farm. A Bunnelby plague dug the whole thing to dust, and nobody came. Except them.
+- Choice: **"They were hurting those Pidgey."** / **"Maybe they've got a point."**
 - KIT (first): Yeah... netting them like that is rough. I'm just saying, someone has to care.
 - KIT (second): Right? Not everyone sees it. Anyway, Badge first, big questions later!
-
-**To ask the director:** which introduced bird Pokémon is Firebreak netting on Route 2? (The
-dialogue says "birds" until he picks.)
 
 ### Slice scene 5: the first gym (Wattlebrook, Dusty's reptile park)
 
@@ -162,13 +160,11 @@ on sun-warmed rocks. Two keepers wait on the way in.
 - DUSTY: Let's see if you've got the patience. Ready?
 - Battle: Dusty, Larvitar 12, Totodile 13, Gible 14 (ace; holds an Oran Berry on hard; D-037).
 - DUSTY (beaten): Well. You kept your cool, and so did your team. That's all I ask.
-- DUSTY: Here's the [badge name]. It's yours.
+- DUSTY: Here's the Scale Badge. It's yours.
 - If Hard, DUSTY: Your Pokémon can grow up to level 21 now.
-- DUSTY: And take this. [the move Dusty gives]
-- DUSTY: About Firebreak. They're not wrong that some newcomers do harm. But you don't net a
+- DUSTY: And take this. Dragon Tail. One good swipe and the other trainer has to send out someone else.
+- DUSTY: About Firebreak. They're not wrong that some newcomers do harm. Ask any farmer about Bunnelby. But you don't net a
   whole gully and call it caring. Not near my park.
 Outside, Kit is waiting, Badge already pinned on.
 - KIT: Took your time! Port Halyard's next, down the coast. Ferries, the big bridge. You'll love it.
 End of the slice.
-
-**To ask the director:** what is Dusty's badge called, and which move comes with it?
