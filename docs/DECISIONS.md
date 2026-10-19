@@ -6,6 +6,12 @@ changes. Only the merge role edits this file, from the "Board and log" section o
 D-001 to D-023 match D1 to D23 in the design spec
 (`docs/superpowers/specs/2026-10-19-southern-cross-design.md`).
 
+## 2026-10-19 · D-041 · Director · Starter designs
+- Koala line: the baby is a joey asleep on a gum leaf it uses as a blanket, the leaf's oil hinting at Poison; then a regional Komala; then a big old-growth koala whose log has become a living, flowering gum branch, with a toxic oil mist (a slow, bulky Grass/Poison).
+- Ekans line: an inland taipan of the red centre with ember-red scales; the third stage is a huge Fire/Ground serpent that swims through hot red sand.
+- Sandile line: saltwater (estuary) crocodiles, river-mud brown and green, Water; Krookodile's form is Water/Dark.
+Art starts with local, free tools; any paid tool is asked first.
+
 ## 2026-10-19 · D-038 · Director · Major trainers' moves: Claude drafts a team sheet, the director edits it
 Each major trainer gets one sheet (legal moves at level, checked against the game's data) for him to change before it is built.
 
