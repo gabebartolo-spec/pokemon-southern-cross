@@ -171,7 +171,8 @@ the way up: a Birdwatcher and an Arborist.
 - WREN: They only care whether you're ready. Are you?
 - Battle: Wren, ace Staravia at level 14 (team set in the gym leaders task).
 - WREN (beaten): Ha! You stood your ground. That's all a magpie ever asks.
-- WREN: This is the Swoop Badge. It's yours. Your Pokémon can grow up to level 21 now.
+- WREN: This is the Swoop Badge. It's yours.
+- If Hard, WREN: Your Pokémon can grow up to level 21 now.
 - WREN: And this is Aerial Ace. A good move never misses, and neither does a good trainer.
 - WREN: About Firebreak. They're not wrong that the Pidgey crowd out the little birds. But you
   don't rob nests in spring. Not in my town.
