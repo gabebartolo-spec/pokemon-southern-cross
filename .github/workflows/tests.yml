@@ -1,7 +1,7 @@
 name: tests
 on:
   push:
-    branches: [main, claude/harness-ci]
+    branches: [main]
   pull_request:
 concurrency:
   group: tests-${{ github.ref }}
