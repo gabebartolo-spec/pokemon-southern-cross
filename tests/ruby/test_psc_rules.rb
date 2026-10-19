@@ -70,8 +70,25 @@ class TestPscRules < Minitest::Test
   def test_ai_skill_halved_on_normal
     assert_equal 50, PSC::Rules.ai_skill(100, mode: :normal)
     assert_equal 15, PSC::Rules.ai_skill(31, mode: :normal)
-    assert_equal 0, PSC::Rules.ai_skill(0, mode: :normal)
     assert_equal 100, PSC::Rules.ai_skill(100, mode: :hard)
+  end
+
+  def test_ai_skill_on_normal_never_drops_a_trainer_to_wild_play
+    assert_equal 1, PSC::Rules.ai_skill(1, mode: :normal)
+    assert_equal 1, PSC::Rules.ai_skill(3, mode: :normal)
+    assert_equal 0, PSC::Rules.ai_skill(0, mode: :normal) # skill 0 stays 0, it is not raised
+  end
+
+  # Essentials v21.1's UseOnPokemonMaximum formula for every Exp Candy (Item_Effects).
+  def candies_offered(pkmn, gain) = ((pkmn.growth_rate.maximum_exp - pkmn.exp) / gain.to_f).ceil
+
+  def test_exp_candy_count_stops_at_the_candy_that_reaches_the_cap
+    exp_now = 3_000 # level 14; cap 15 starts at 15**3 = 3375, 375 Exp away
+    stand_in = PSC::Rules.candy_stand_in(exp: exp_now, exp_at_cap: exp_for(15))
+    assert_equal 4, candies_offered(stand_in, 100)    # XS: 300 falls short, the 4th reaches the cap
+    assert_equal 1, candies_offered(stand_in, 800)    # S
+    assert_equal 1, candies_offered(stand_in, 30_000) # XL
+    assert_equal 0, candies_offered(PSC::Rules.candy_stand_in(exp: exp_for(15), exp_at_cap: exp_for(15)), 100)
   end
 
   def test_mode_defaults_to_hard_when_missing_from_save

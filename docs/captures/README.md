@@ -31,6 +31,24 @@ it cannot be made clean by moving things in code. It waits for the licensed Gen 
 | Poké Mart | `mart_menu.png`, `mart_buy.png` | Menu clean. Buy screen needs art: the Money window covers the first letters of the item names, and the description's third line is cut at the bottom. |
 | PC | `pc_menu.png`, `pc_storage.png` | PC menu clean. Box storage needs art: the box and the party panel are cut at the right and bottom. |
 
+## Task 6: difficulty and level caps (D-008, D-021, D-022), 2026-10-19
+
+Engine frames (`Graphics.screenshot`, 480x320) scaled 2x nearest-neighbour, from one debug run driven by a
+scratch harness (scripted keys; not committed). Hard mode, 0 badges, cap 14 (`game/Data/psc_caps.json`).
+Party: Zigzagoon, Poochyena; wild Magikarp Lv.2 on Route 1. The difficulty copy is from the story draft
+(docs/region/STORY.md, slice scene 1, PR #3) and waits for the director's story approval.
+
+| Check | Capture | What the run showed |
+|---|---|---|
+| Difficulty choice | `01_choice_acacia_line.png`, `02_choice_hard.png`, `03_choice_normal.png` | Acacia's line, then "Normal" / "Hard" with the help line per option; cursor starts on Hard. A second call returned :hard without asking. |
+| Pause menu | `04_pause_hard.png`, `05_pause_normal.png` | "Level cap: 14" on hard; no line on normal. |
+| Exp stops at the cap | `06_exp_clamped_to_cap.png` | Zigzagoon Lv.13, 1 Exp short of Lv.14: "got 1 Exp. Points!", then Lv.14 with exp exactly 2744 (Lv.14's minimum). |
+| Battle at the cap | `07_battle_cap_message.png` | "Zigzagoon can't grow any stronger until the next badge."; exp unchanged (2744). |
+| Rare Candy at the cap | `08_rare_candy_refused.png` | The same message; Rare Candies still 5 of 5. |
+| Exp Candy quantity | `10_exp_candy_max_offered.png` | Poochyena Lv.12 needs 1016 Exp to reach Lv.14: the prompt's top is x011 (11 Exp Candy XS), not the 20 held. Cancelled; still 20. |
+| Normal-mode trim | `11a_trim_inspect.png`, `11b_trim_inspect.png`, `11c_trim_inspect.png` | Brock's Onix as an opposing trainer: normal no item, EVs 0, AI skill 50; hard Sitrus Berry, EVs 21 each, AI skill 100. As a partner on normal it keeps Sitrus Berry and EVs 21 (the harness printed the values in a message). |
+| Old save | `12_old_save_pause_hard.png` | A save written with no @psc_mode at all loads as hard: "Level cap: 14". |
+
 ## Manual re-check (each mkxp-z update)
 
 mkxp-z 2.4.2 resets `Graphics.scale` to 1.0 one frame after the first `Graphics.resize_screen`, so without

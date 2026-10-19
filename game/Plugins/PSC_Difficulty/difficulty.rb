@@ -60,8 +60,9 @@ module PSC
       pkmn.calc_stats
     end
 
-    # Rare Candy and Exp Candies are refused at the cap (and not used up); Rare Candies offer
-    # only as many at once as fit under the cap.
+    # Rare Candy and Exp Candies are refused at the cap (and not used up). Below it, the "how
+    # many" prompt offers only as many as reach the cap: Rare Candies by level, Exp Candies by
+    # running Essentials' own formula on a stand-in whose maximum Exp is the cap level's minimum.
     def wrap_level_items
       (RARE_CANDIES + EXP_CANDIES).each do |item|
         use = ItemHandlers::UseOnPokemon[item]
@@ -82,6 +83,16 @@ module PSC
                                             wanted: most.call(itm, pkmn))
         })
       end
+      EXP_CANDIES.each do |item|
+        most = ItemHandlers::UseOnPokemonMaximum[item]
+        next if !most
+        ItemHandlers::UseOnPokemonMaximum.add(item, proc { |itm, pkmn|
+          c = PSC::Difficulty.cap
+          next most.call(itm, pkmn) if c.nil?
+          next most.call(itm, PSC::Rules.candy_stand_in(
+            exp: pkmn.exp, exp_at_cap: pkmn.growth_rate.minimum_exp_for_level(c)))
+        })
+      end
     end
   end
 end
@@ -92,13 +103,15 @@ class PokemonGlobalMetadata
 end
 
 # The intro event calls this once, after Professor Acacia's welcome (docs/region/STORY.md,
-# slice scene 1). The choice is made once and never changed: later calls return the saved mode.
-def pbPscChooseDifficulty(prompt = nil)
+# slice scene 1; copy pending the director's story approval). The choice is made once and never
+# changed: later calls return the saved mode without asking.
+def pbPscChooseDifficulty
   return PSC::Difficulty.mode if !$PokemonGlobal.psc_mode.nil?
-  commands = [_INTL("Normal: a friendlier road"), _INTL("Hard: every trainer plays to win")]
-  prompt ||= _INTL("Before we start, tell me how you like your road.")
-  hard_index = commands.length - 1
-  choice = pbMessage(prompt, commands, 0, nil, hard_index)   # 0: cannot cancel; cursor on Hard
+  pbMessage(_INTL("Before we start, tell me how you like your road."))
+  commands = [_INTL("Normal"), _INTL("Hard")]
+  help     = [_INTL("A friendlier road."), _INTL("Every trainer plays to win.")]
+  hard_index = commands.index(_INTL("Hard"))
+  choice = pbShowCommandsWithHelp(nil, commands, help, 0, hard_index)   # 0: cannot cancel; cursor on Hard
   $PokemonGlobal.psc_mode = (choice == hard_index) ? PSC::Rules::HARD : PSC::Rules::NORMAL
   return $PokemonGlobal.psc_mode
 end
@@ -127,15 +140,19 @@ module GameData
       return psc_difficulty_add_exp(exp1, PSC::Difficulty.capped_exp(self, exp1, exp2))
     end
   end
+end
 
-  # Normal mode trims trainers' Pokemon after Essentials builds them.
-  class Trainer
-    alias_method :psc_difficulty_to_trainer, :to_trainer unless method_defined?(:psc_difficulty_to_trainer)
+# Normal mode trims the opposing trainers' Pokemon for this battle. Hooked here, not in
+# GameData::Trainer#to_trainer, because to_trainer also builds partner trainers
+# (pbRegisterPartner), who fight on the player's side and keep their items and EVs.
+class TrainerBattle
+  class << self
+    alias_method :psc_difficulty_generate_foes, :generate_foes unless method_defined?(:psc_difficulty_generate_foes)
 
-    def to_trainer
-      trainer = psc_difficulty_to_trainer
-      trainer.party.each { |pkmn| PSC::Difficulty.trim(pkmn) }
-      return trainer
+    def generate_foes(*args)
+      ret = psc_difficulty_generate_foes(*args)
+      ret[0].each { |trainer| trainer.party.each { |pkmn| PSC::Difficulty.trim(pkmn) } }
+      return ret
     end
   end
 end

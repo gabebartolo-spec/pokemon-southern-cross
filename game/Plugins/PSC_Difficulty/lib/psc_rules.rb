@@ -8,11 +8,19 @@ module PSC
   module Rules
     HARD   = :hard
     NORMAL = :normal
-    # Normal mode keeps every trainer's team but halves the AI's skill (D-021).
+    # Normal mode keeps every trainer's team but halves the AI's skill (D-021), never below the
+    # lowest trainer skill, so a trainer never plays like a wild Pokemon (skill 0).
     NORMAL_AI_SKILL_DIVISOR = 2
+    MIN_TRAINER_SKILL       = 1
     # The caps file written by tools/validate/content.py --emit-caps: {"<badges>": cap, ...}.
     CAPS_PAIR = /"(\d+)"\s*:\s*(\d+)/
     CAPS_FILE = /\A\s*\{\s*(#{CAPS_PAIR}\s*(,\s*#{CAPS_PAIR}\s*)*)?\}\s*\z/
+
+    # A stand-in Pokemon for Essentials' Exp Candy "how many at once" formula,
+    # ((growth_rate.maximum_exp - exp) / gain).ceil: its maximum Exp is the cap level's
+    # minimum, so the count offered stops at the candy that reaches the cap.
+    CandyPokemon = Struct.new(:exp, :growth_rate)
+    CandyGrowth  = Struct.new(:maximum_exp)
 
     @caps = {}
 
@@ -66,8 +74,13 @@ module PSC
       end
 
       def ai_skill(base_skill, mode:)
-        return base_skill if mode_from_save(mode) == HARD
-        return [base_skill / NORMAL_AI_SKILL_DIVISOR, 0].max
+        return base_skill if mode_from_save(mode) == HARD || base_skill < MIN_TRAINER_SKILL
+        return [base_skill / NORMAL_AI_SKILL_DIVISOR, MIN_TRAINER_SKILL].max
+      end
+
+      # A stand-in Pokemon for Essentials' Exp Candy "how many at once" formula (see CandyPokemon).
+      def candy_stand_in(exp:, exp_at_cap:)
+        return CandyPokemon.new(exp, CandyGrowth.new(exp_at_cap))
       end
 
       # Parses the caps file text into {Integer badges => Integer cap}. Only the flat shape the
