@@ -1,6 +1,6 @@
 ---
 name: psc-handoff
-description: Writing and starting from a Pokemon Southern Cross agent handoff - the file agent-handoffs/ROLE.md inside the repo that lets a fresh session continue without the old transcript, its 120-line cap, rewrite not append, and when to hand off. Use it when a task is done or you switch to unrelated work, when your context is getting long (past about about 200k tokens), before the director restarts or clears a session, and at the start of any new session.
+description: Writing and starting from a Pokemon Southern Cross agent handoff - the file agent-handoffs/ROLE.md inside the repo that lets a fresh session continue without the old transcript, its 120-line cap, edited not appended, and when to hand off. Use it when a task is done or you switch to unrelated work, when your context is getting long (past about about 200k tokens), before the director restarts or clears a session, and at the start of any new session.
 ---
 
 # Handoffs
