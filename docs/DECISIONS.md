@@ -6,6 +6,12 @@ changes. Only the merge role edits this file, from the "Board and log" section o
 D-001 to D-023 match D1 to D23 in the design spec
 (`docs/superpowers/specs/2026-10-19-southern-cross-design.md`).
 
+## 2026-10-19 · D-043 · Director · New Pokémon names: Koaleaf, Eucalord and Taiparch
+- Koaleaf is the baby koala (it evolves into the regional Komala).
+- Eucalord is the koala line's third stage.
+- Taiparch is the taipan line's third stage, after the regional Arbok.
+The regional forms take their name from the region's final name, decided later.
+
 ## 2026-10-19 · D-042 · Director · Kit's reason, Route 2's birds and Dusty's badge (interview)
 - **Kit:** drawn into Firebreak because Kit's family lost their farm when an introduced Pokémon (a Bunnelby plague, like Australia's rabbit plagues) dug it to dust and nobody helped; Firebreak did.
 - **Route 2:** Firebreak nets introduced Pidgey.
