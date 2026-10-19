@@ -17,8 +17,8 @@
 
     // The game window's width and height, in pixels.
     //
-    "defScreenW": 512,
-    "defScreenH": 384,
+    "defScreenW": 960,
+    "defScreenH": 640,
 
     // The path to the game window's icon. For Linux only. (Default: none)
     //
@@ -105,7 +105,7 @@
     // window. If false, the game screen will stretch and distort to fill the
     // entire window.
     //
-    // "fixedAspectRatio": true,
+    "fixedAspectRatio": true,
 
     // When resizing the game screen to fit the window, whether to scale up the
     // game screen by an integer amount (as large as the current window size
@@ -116,23 +116,23 @@
     // and vertical direction can differ depending on how much space is
     // available; otherwise they are forced to the smaller of the two.
     //
-    // "integerScalingActive": false,
+    "integerScalingActive": true,
 
     // When integerScalingActive is enabled, this option controls whether the
     // scaled game screen is further scaled (with linear interpolation when
     // smoothScaling is enabled) to fill the rest of the game window.
     // Note that this option still respects fixedAspectRatio.
     //
-    // "integerScalingLastMile": true,
+    "integerScalingLastMile": false,
 
     // Whether to apply linear interpolation when the game screen is upscaled.
     //
-    // "smoothScaling": false,
+    "smoothScaling": false,
 
     // Whether to apply Lanczos3 interpolation when the game screen is upscaled
     // (typically higher quality than the linear smoothScaling).
     //
-    // "lanczos3Scaling": false,
+    "lanczos3Scaling": false,
 
     // Workaround for buggy graphics drivers that don't properly synchronize
     // texture access. This is most apparent when text doesn't show up or the
