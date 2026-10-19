@@ -1,6 +1,6 @@
 ---
 name: psc-pr
-description: Opening, syncing and handing over a pull request the Pokemon Southern Cross way - worktree and branch, the PR body sections and [MERGE NOTE], floors, director gates, who merges, the Board and log section. Extends the general github-hygiene skill (~/.claude/skills) with this repo's template, board rules and roles. Use it whenever you are about to open a PR, update one after main moved, resolve a conflict in tests/expected_checks.txt, or tell another agent about a PR or CI result.
+description: Opening, syncing and handing over a pull request the Pokemon Southern Cross way - worktree and branch, the PR body sections and [MERGE NOTE], director gates, who merges, the Board and log section. Extends the general github-hygiene skill (~/.claude/skills) with this repo's template, board rules and roles. Use it whenever you are about to open a PR, update one after main moved, or tell another agent about a PR or CI result.
 ---
 
 # A PR the Pokemon Southern Cross way
@@ -37,8 +37,7 @@ records them in a board PR after the merge.
 
 - You do not merge unless you are the merge role. Green + eligible = merge, for the exact head
   commit, after any required review and director gate. Never enable auto-merge.
-- Sync your own branch when main moves under it; a floor conflict resolves to the real count
-  after the merge. Remove your worktree when the PR merges.
+- Sync your own branch when main moves under it. Remove your worktree when the PR merges.
 - Hand over at task boundaries: `agent-handoffs/<role>.md` (see psc-handoff).
 
 ## Learnings

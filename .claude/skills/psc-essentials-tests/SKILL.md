@@ -1,9 +1,9 @@
 ---
 name: psc-essentials-tests
-description: Running and extending the Pokemon Southern Cross automated checks - tools/run_tests.sh suites (python, ruby, content), the SUITE lines, check floors in tests/expected_checks.txt, doc-size caps, and what CI does and does not cover. Extends the general game-architecture skill (~/.claude/skills). Use it before adding a test, a suite or a floor, when CI goes red on tests, or when deciding how to prove a change.
+description: Running and extending the Pokemon Southern Cross automated checks - tools/run_tests.sh suites (python, ruby, content), the SUITE lines, the test-function count (tools/functions_ran.py), doc-size caps, and what CI does and does not cover. Extends the general game-architecture skill (~/.claude/skills). Use it before adding a test or a suite, when CI goes red on tests, or when deciding how to prove a change.
 ---
 
-# Tests and check floors
+# Tests and the function count
 
 The general rules are the `game-architecture` skill; this holds what is specific to this repo.
 
@@ -23,12 +23,16 @@ failure, so a skip never hides in CI.
 - `ruby`: minitest files `tests/ruby/test_*.rb`, loaded by `run_tests.sh`; runs in CI on any machine without Ruby.
 - `content`: `tools/validate/content.py`, validating PBS and `content/`. It prints `CHECKS <n>`, n = number of validation rules (`len(content.RULES)`).
 
-## Floors
+## Every test function ran (no floors)
 
-`tests/expected_checks.txt` holds `<suite> <floor>` lines. `python tools/check_floors.py run.log`
-exits 1 if a suite ran fewer checks than its floor, or a floored suite left no result (SKIPPED
-is ignored). Raise the floor in the PR that adds checks to a suite; never lower one. To add a
-suite: add a `suite_<name>` function and a case line in `tools/run_tests.sh`, then a floor line.
+The python and ruby suites print `SUITE <name> FUNCTIONS <ran> of <defined>`
+(`tools/functions_ran.py`, called by `run_tests.sh`): every `test_*` function in the suite's
+files must appear in the run's results (pytest's junit report, minitest's `-v` lines), and one
+that never ran, or is shadowed by a second definition of the same name, fails the suite and is
+named (`never ran: <file>::<test>`). A new test counts itself, so there is no floor file to edit
+and two PRs never conflict over a count (director 2026-10-19, github-hygiene §4; this replaced
+`tests/expected_checks.txt` and `check_floors.py`). To add a suite: add a `suite_<name>`
+function and a case line in `tools/run_tests.sh`. Locally, run only the suite you touched.
 
 ## Doc caps
 

@@ -1,70 +1,95 @@
-"""Tests for the floor checker (tools/check_floors.py)."""
+"""Tests for the function counter (tools/functions_ran.py) and the doc caps."""
 import importlib.util
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-SCRIPT = ROOT / "tools" / "check_floors.py"
+SCRIPT = ROOT / "tools" / "functions_ran.py"
+
+PY_TESTS = '''
+import pytest
+
+def test_a():
+    pass
+
+@pytest.mark.parametrize("n", [1, 2])
+def test_b(n):
+    pass
+
+class TestThing:
+    def test_c(self):
+        pass
+
+def helper():
+    pass
+'''
 
 
-def run_floors(tmp_path, log_text, floors_text):
-    log = tmp_path / "run.log"
-    floors = tmp_path / "expected_checks.txt"
-    log.write_text(log_text, encoding="utf-8")
-    floors.write_text(floors_text, encoding="utf-8")
-    return subprocess.run(
-        [sys.executable, str(SCRIPT), str(log), "--floors", str(floors)],
-        capture_output=True, text=True,
-    )
+def junit(cases):
+    rows = "".join(f'<testcase classname="{c}" name="{n}"/>' for c, n in cases)
+    return f'<?xml version="1.0"?><testsuites><testsuite>{rows}</testsuite></testsuites>'
 
 
-def test_floor_rejects_lower_count(tmp_path):
-    result = run_floors(tmp_path, "SUITE python CHECKS 3\n", "python 4\n")
+def run_counter(tmp_path, suite, filename, source, result_text):
+    tests = tmp_path / "tests"
+    tests.mkdir()
+    (tests / filename).write_text(source, encoding="utf-8")
+    result = tmp_path / "result.txt"
+    result.write_text(result_text, encoding="utf-8")
+    return subprocess.run([sys.executable, str(SCRIPT), suite, str(result), "--tests", str(tests)],
+                          capture_output=True, text=True)
+
+
+def test_counter_accepts_every_function_ran(tmp_path):
+    cases = [("tests.test_x", "test_a"), ("tests.test_x", "test_b[1]"), ("tests.test_x", "test_b[2]"),
+             ("tests.test_x.TestThing", "test_c")]
+    result = run_counter(tmp_path, "python", "test_x.py", PY_TESTS, junit(cases))
+    assert result.returncode == 0, result.stdout
+    assert "SUITE python FUNCTIONS 3 of 3" in result.stdout
+
+
+def test_counter_names_a_function_that_never_ran(tmp_path):
+    cases = [("tests.test_x", "test_a"), ("tests.test_x", "test_b[1]")]
+    result = run_counter(tmp_path, "python", "test_x.py", PY_TESTS, junit(cases))
     assert result.returncode == 1
+    assert "FUNCTIONS 2 of 3" in result.stdout
+    assert "never ran: test_x::TestThing.test_c" in result.stdout
 
 
-def test_floor_accepts_equal_count(tmp_path):
-    result = run_floors(tmp_path, "SUITE python CHECKS 4\n", "python 4\n")
-    assert result.returncode == 0
+def test_counter_fails_a_shadowed_function(tmp_path):
+    source = "def test_a():\n    pass\n\ndef test_a():\n    pass\n"
+    result = run_counter(tmp_path, "python", "test_x.py", source, junit([("tests.test_x", "test_a")]))
+    assert result.returncode == 1 and "never ran: test_x::test_a" in result.stdout
 
 
-def test_floor_ignores_skipped_suite(tmp_path):
-    result = run_floors(tmp_path, "SUITE python CHECKS 4\nSUITE ruby SKIPPED (no ruby)\n",
-                        "python 4\nruby 1\n")
-    assert result.returncode == 0
-    assert "skip ruby" in result.stdout
+def test_counter_fails_a_suite_with_no_tests(tmp_path):
+    result = run_counter(tmp_path, "python", "test_x.py", "def helper():\n    pass\n", junit([]))
+    assert result.returncode == 1 and "no test functions" in result.stdout
 
 
-def test_floored_suite_with_no_result_fails(tmp_path):
-    result = run_floors(tmp_path, "SUITE python CHECKS 4\n", "python 4\nruby 1\n")
-    assert result.returncode == 1
-    assert "no result" in result.stdout
+RB_TESTS = '''
+class TestRules < Minitest::Test
+  def test_one
+  end
+
+  def test_two?
+  end
+end
+'''
 
 
-def run_base(tmp_path, floors_text, base_text, log_text="SUITE python CHECKS 99\nSUITE ruby CHECKS 99\n"):
-    base = tmp_path / "base.txt"
-    base.write_text(base_text, encoding="utf-8")
-    log = tmp_path / "run.log"
-    floors = tmp_path / "expected_checks.txt"
-    log.write_text(log_text, encoding="utf-8")
-    floors.write_text(floors_text, encoding="utf-8")
-    return subprocess.run([sys.executable, str(SCRIPT), str(log), "--floors", str(floors),
-                           "--base", str(base)], capture_output=True, text=True)
+def test_counter_reads_minitest_verbose_output(tmp_path):
+    out = "TestRules#test_one = 0.00 s = .\nTestRules#test_two? = 0.00 s = .\n2 runs, 2 assertions\n"
+    result = run_counter(tmp_path, "ruby", "test_rules.rb", RB_TESTS, out)
+    assert result.returncode == 0, result.stdout
+    assert "SUITE ruby FUNCTIONS 2 of 2" in result.stdout
 
 
-def test_ratchet_rejects_lowered_floor(tmp_path):
-    result = run_base(tmp_path, "python 5\nruby 1\n", "python 6\nruby 1\n")
-    assert result.returncode == 1 and "lowered" in result.stdout
-
-
-def test_ratchet_rejects_missing_suite(tmp_path):
-    result = run_base(tmp_path, "python 6\n", "python 6\nruby 1\n")
-    assert result.returncode == 1 and "removed" in result.stdout
-
-
-def test_ratchet_accepts_equal_and_raised(tmp_path):
-    assert run_base(tmp_path, "python 6\nruby 2\n", "python 6\nruby 1\n").returncode == 0
+def test_counter_names_a_ruby_test_that_never_ran(tmp_path):
+    out = "TestRules#test_one = 0.00 s = .\n1 runs, 1 assertions\n"
+    result = run_counter(tmp_path, "ruby", "test_rules.rb", RB_TESTS, out)
+    assert result.returncode == 1 and "never ran: test_rules::test_two?" in result.stdout
 
 
 def test_doc_caps_regex_is_anchored(tmp_path):
