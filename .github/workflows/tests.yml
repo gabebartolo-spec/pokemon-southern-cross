@@ -13,6 +13,8 @@ jobs:
       PSC_CI: "1"
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -23,3 +25,12 @@ jobs:
       - run: bash tools/run_tests.sh | tee run.log
         shell: bash
       - run: python tools/check_floors.py run.log
+      - name: Floor ratchet (floors never lower than the base)
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git show "origin/${{ github.base_ref }}:tests/expected_checks.txt" > base_floors.txt
+          else
+            git show HEAD~1:tests/expected_checks.txt > base_floors.txt 2>/dev/null || { echo "no previous commit floors, skipped"; exit 0; }
+          fi
+          python tools/check_floors.py run.log --base base_floors.txt

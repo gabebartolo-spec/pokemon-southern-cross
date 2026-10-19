@@ -1,4 +1,5 @@
 # <suite> <floor>. A suite must print at least this many checks (tools/check_floors.py).
 # Raise a floor in the PR that adds checks; never lower one. SKIPPED suites are ignored.
-python 78
+python 101
 ruby 1
+content 8

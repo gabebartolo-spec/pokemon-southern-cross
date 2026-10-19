@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Fail if a must-read doc is longer than its cap.
 
-A doc's cap is the integer on its `Cap: N lines` line. CLAUDE.md has no Cap line, so its cap
+A doc's cap is the integer on its `Cap: N lines` line (the line must start with `Cap:`). CLAUDE.md has no Cap line, so its cap
 is CLAUDE_MD_CAP below. A doc that exists but has no cap fails; a doc that does not exist yet
 is skipped.
 """
@@ -23,7 +23,7 @@ def main():
             continue
         text = p.read_text(encoding="utf-8")
         n = len(text.splitlines())
-        m = re.search(r"Cap:\s*(\d+)\s*lines", text)
+        m = re.search(r"^Cap:\s*(\d+)\s*lines", text, re.M)
         cap = int(m.group(1)) if m else (CLAUDE_MD_CAP if rel == "CLAUDE.md" else None)
         if cap is None:
             print(f"FAIL {rel}: no `Cap: N lines` line")
