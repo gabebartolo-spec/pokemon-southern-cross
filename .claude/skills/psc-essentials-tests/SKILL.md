@@ -15,13 +15,13 @@ bash tools/run_tests.sh python     # or: ruby | content
 ```
 
 Each passing suite prints `SUITE <name> CHECKS <n>`. A suite that cannot run here prints
-`SUITE <name> SKIPPED` and exits 0: `ruby` when Ruby is not installed, `content` until
-`tools/validate/content.py` exists. CI sets `PSC_CI=1`, which turns a missing runtime into a
+`SUITE <name> SKIPPED` and exits 0: `ruby` when Ruby is not installed, `content` only if
+`tools/validate/content.py` is missing. CI sets `PSC_CI=1`, which turns a missing runtime into a
 failure, so a skip never hides in CI.
 
 - `python`: `python -m pytest tests/python` (needs `pip install pytest`).
 - `ruby`: minitest files `tests/ruby/test_*.rb`, loaded by `run_tests.sh`; runs in CI on any machine without Ruby.
-- `content`: `tools/validate/content.py`, validating PBS and `content/`. It must print a line containing `CHECKS <n>`.
+- `content`: `tools/validate/content.py`, validating PBS and `content/`. It prints `CHECKS <n>`, n = number of validation rules (`len(content.RULES)`).
 
 ## Floors
 
