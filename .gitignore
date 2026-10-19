@@ -11,3 +11,5 @@ review/
 # Claude Code worktrees and local settings
 .claude/worktrees/
 .claude/settings.local.json
+.pytest_cache/
+run.log
