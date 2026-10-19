@@ -1,0 +1,236 @@
+{
+ "source": "game/Data/Map031.rxdata event 10 (Trainer(2))",
+ "map": 31,
+ "event_id": 10,
+ "object": {
+  "id": 10,
+  "name": "Crissy",
+  "type": "trainer",
+  "x": 416,
+  "y": 544,
+  "width": 32,
+  "height": 32,
+  "properties": [
+   {
+    "name": "trainer",
+    "type": "string",
+    "value": "LASS,Crissy"
+   },
+   {
+    "name": "sight",
+    "type": "int",
+    "value": 2
+   },
+   {
+    "name": "direction",
+    "type": "string",
+    "value": "up"
+   },
+   {
+    "name": "doubles",
+    "type": "bool",
+    "value": true
+   },
+   {
+    "name": "intro",
+    "type": "string",
+    "value": "\\rGet ready for a double battle!"
+   },
+   {
+    "name": "after",
+    "type": "string",
+    "value": "\\rMake sure all double battle opponents have at least \n2 Pok\u00e9mon!"
+   }
+  ]
+ },
+ "event": {
+  "class": "RPG::Event",
+  "@pages": [
+   {
+    "class": "RPG::Event::Page",
+    "@move_type": 0,
+    "@list": [
+     [
+      0,
+      355,
+      [
+       "pbTrainerIntro(:LASS)"
+      ]
+     ],
+     [
+      0,
+      355,
+      [
+       "pbNoticePlayer(get_self)"
+      ]
+     ],
+     [
+      0,
+      101,
+      [
+       "\\rGet ready for a double battle!"
+      ]
+     ],
+     [
+      0,
+      355,
+      [
+       "setBattleRule(\"double\")"
+      ]
+     ],
+     [
+      0,
+      111,
+      [
+       12,
+       "TrainerBattle.start(:LASS, \"Crissy\")"
+      ]
+     ],
+     [
+      1,
+      123,
+      [
+       "A",
+       0
+      ]
+     ],
+     [
+      1,
+      0,
+      []
+     ],
+     [
+      0,
+      412,
+      []
+     ],
+     [
+      0,
+      355,
+      [
+       "pbTrainerEnd"
+      ]
+     ],
+     [
+      0,
+      0,
+      []
+     ]
+    ],
+    "@condition": {
+     "class": "RPG::Event::Page::Condition",
+     "@switch2_valid": false,
+     "@self_switch_ch": "A",
+     "@switch1_id": 1,
+     "@switch1_valid": false,
+     "@variable_value": 0,
+     "@self_switch_valid": false,
+     "@variable_id": 1,
+     "@variable_valid": false,
+     "@switch2_id": 1
+    },
+    "@direction_fix": false,
+    "@move_route": {
+     "class": "RPG::MoveRoute",
+     "@list": [
+      {
+       "class": "RPG::MoveCommand",
+       "@parameters": [],
+       "@code": 0
+      }
+     ],
+     "@skippable": false,
+     "@repeat": true
+    },
+    "@trigger": 2,
+    "@step_anime": false,
+    "@move_frequency": 3,
+    "@graphic": {
+     "class": "RPG::Event::Page::Graphic",
+     "@opacity": 255,
+     "@character_name": "trainer_LASS",
+     "@pattern": 0,
+     "@tile_id": 0,
+     "@direction": 8,
+     "@blend_type": 0,
+     "@character_hue": 0
+    },
+    "@always_on_top": false,
+    "@walk_anime": true,
+    "@move_speed": 3,
+    "@through": false
+   },
+   {
+    "class": "RPG::Event::Page",
+    "@move_type": 0,
+    "@list": [
+     [
+      0,
+      101,
+      [
+       "\\rMake sure all double battle opponents have at least "
+      ]
+     ],
+     [
+      0,
+      401,
+      [
+       "2 Pok\u00e9mon!"
+      ]
+     ],
+     [
+      0,
+      0,
+      []
+     ]
+    ],
+    "@condition": {
+     "class": "RPG::Event::Page::Condition",
+     "@switch2_valid": false,
+     "@self_switch_ch": "A",
+     "@switch1_id": 1,
+     "@switch1_valid": false,
+     "@variable_value": 0,
+     "@self_switch_valid": true,
+     "@variable_id": 1,
+     "@variable_valid": false,
+     "@switch2_id": 1
+    },
+    "@direction_fix": false,
+    "@move_route": {
+     "class": "RPG::MoveRoute",
+     "@list": [
+      {
+       "class": "RPG::MoveCommand",
+       "@parameters": [],
+       "@code": 0
+      }
+     ],
+     "@skippable": false,
+     "@repeat": true
+    },
+    "@trigger": 0,
+    "@step_anime": false,
+    "@move_frequency": 3,
+    "@graphic": {
+     "class": "RPG::Event::Page::Graphic",
+     "@opacity": 255,
+     "@character_name": "trainer_LASS",
+     "@pattern": 0,
+     "@tile_id": 0,
+     "@direction": 8,
+     "@blend_type": 0,
+     "@character_hue": 0
+    },
+    "@always_on_top": false,
+    "@walk_anime": true,
+    "@move_speed": 3,
+    "@through": false
+   }
+  ],
+  "@name": "Trainer(2)",
+  "@y": 17,
+  "@x": 13,
+  "@id": 10
+ }
+}

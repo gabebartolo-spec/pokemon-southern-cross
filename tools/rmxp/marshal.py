@@ -3,6 +3,10 @@
 Import as ``tools.rmxp.marshal`` (it shadows the stdlib module only inside this package).
 Round trips are byte for byte: object links (@) and symbol links (;) are reproduced by
 object identity, string encoding ivars are kept, floats and bignums keep their original bytes.
+
+Writing: Ruby Strings must be ``RString`` (``RString.utf8("text")`` for new UTF-8 text) and
+Symbols ``Sym``; a plain Python ``str`` is rejected by ``dumps``. Give every String its own
+RString object: one object written twice becomes a Ruby object link.
 """
 
 
