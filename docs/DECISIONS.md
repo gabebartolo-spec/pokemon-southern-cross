@@ -6,6 +6,11 @@ changes. Only the merge role edits this file, from the "Board and log" section o
 D-001 to D-023 match D1 to D23 in the design spec
 (`docs/superpowers/specs/2026-10-19-southern-cross-design.md`).
 
+## 2026-10-19 · D-028 · Director · The repo is public (reverses D-018's private)
+Why: GitHub would not run checks on the private repo because of an account billing block; public
+repos get free checks. Accepted cost: the project can be found before it is playable. Changes:
+the "repo stays private" rule is gone; still no builds shared until the director says so.
+
 ## 2026-10-19 · D-027 · Director · Started with the shared kickoff scaffold
 The engine-neutral parts (CLAUDE.md, PR template, board and log, handoffs, project skills). The
 Godot test harness and workflows were left out; Phase 0 replaces them with Essentials equivalents.

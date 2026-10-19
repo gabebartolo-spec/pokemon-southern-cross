@@ -29,7 +29,7 @@ taste and final judgement. Agents supply execution, evidence and honest pushback
 1. **No runtime AI.** No LLM, diffusion or network model in the shipped game. AI is a
    development tool only.
 2. **Never sold, never monetised.** No price, donations, Patreon, ads or paid builds tied to the
-   game; the repo stays private and no build is shared until the director says so.
+   game; the repo is public (D-028), but no build is shared until the director says so.
 3. **Essentials stays Essentials.** Game changes live in `Plugins/` and PBS data, not edits to
    Essentials' own scripts, so an Essentials or plugin update stays mergeable.
 4. **Data, not code, holds content and balance** (PBS files and `content/`, validated in CI by
