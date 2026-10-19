@@ -57,3 +57,20 @@ a fix the game opens in a 480x320 window (measured 2026-10-19; later scale chang
 every change and sets it again. After updating mkxp-z: start the game and check the window opens at 960x640,
 then switch Options > Screen Size to 3x and back to 2x (1440x960, then 960x640). If the scale holds without
 the check, the check can go.
+
+## Task 5: Gen 9 Pack sprites, Mega Evolution only (D-011, D-044), 2026-10-19
+
+Engine frames (`Graphics.screenshot`, 480x320) scaled 2x nearest-neighbour, from one debug run driven by a
+scratch harness (scripted keys; not committed; removed before the final plugin compile). Wild battles on
+Route 1; party set by the harness. The battle layout in `game/Plugins/PSC_Screen/ui_battle.rb` was redone
+for the pack's sprites: back sprites shrunk from 3x to 2x pixels, player side raised 16, single-battle foe
+24 lower with the player's databox dropped into the strip above the message bar, doubles pair spread.
+
+| Check | Capture | What the run showed |
+|---|---|---|
+| Command menu | `01_command_menu.png` | Venusaur Lv.50 (Venusaurite, Mega Ring in the bag) against a wild Fuecoco. |
+| Fight menu | `02_fight_menu_mega_only.png` | Moves plus one gimmick button, Mega Evolution; no Tera, Dynamax or Z-Move option exists. |
+| Mega selected | `03_mega_selected.png` | The Mega button switched on. |
+| Mega Evolution | `04_mega_evolved.png` | "Venusaur has Mega Evolved into Mega Venusaur!", Mega back sprite and Mega icon on the databox. |
+| A Gen 9 Pokémon | `05_gen9_battle.png` | Sprigatito (back) against a wild Quaxly (front), both from the pack. Sprigatito's back art is pale cream and green: the pack's colours, fully opaque. |
+| Double battle | `06_double_command.png`, `07_double_fight.png`, `08_double_target.png` | Venusaur and Sprigatito against Kingambit and Quaxly. Both player Pokémon and Quaxly read clearly. Kingambit's head is above the screen: the foes cannot stand lower in doubles without covering the player's two databoxes (measured: 334 of 1,251 pack fronts lose more than 32 px of their top even in singles at the old height; in singles the new height cuts that to 114). |
