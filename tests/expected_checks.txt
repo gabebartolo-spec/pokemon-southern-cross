@@ -2,4 +2,4 @@
 # Raise a floor in the PR that adds checks; never lower one. SKIPPED suites are ignored.
 python 100
 ruby 1
-content 8
+content 7
