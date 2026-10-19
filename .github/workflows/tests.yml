@@ -13,8 +13,6 @@ jobs:
       PSC_CI: "1"
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -22,18 +20,10 @@ jobs:
         with:
           ruby-version: "3.3"
       - run: python -m pip install pytest pillow
-      - run: bash tools/run_tests.sh | tee run.log
+      # Fails on a red test, a suite that did not run, or a test function that never ran
+      # (tools/functions_ran.py names it). No check floors: nothing to edit per PR.
+      - run: bash tools/run_tests.sh
         shell: bash
-      - run: python tools/check_floors.py run.log
-      - name: Floor ratchet (floors never lower than the base)
-        shell: bash
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            git show "origin/${{ github.base_ref }}:tests/expected_checks.txt" > base_floors.txt
-          else
-            git show HEAD~1:tests/expected_checks.txt > base_floors.txt 2>/dev/null || { echo "no previous commit floors, skipped"; exit 0; }
-          fi
-          python tools/check_floors.py run.log --base base_floors.txt
       - name: Map previews (built from the committed map data)
         shell: bash
         run: python tools/maps/preview.py

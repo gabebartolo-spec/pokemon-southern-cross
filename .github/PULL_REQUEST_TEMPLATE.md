@@ -8,7 +8,7 @@ STATUS.md item <n> / decision <D-id>
 <mechanism in a few lines>
 
 ## Evidence
-- Suites: <suite: count> …
+- Suites: <suite: functions ran of defined, checks> …
 - Fixture / seed: <path, seed>
 - Capture or clip: <path or artefact name>
 - Player-effect fixture (for any system change): <tests/effect/... id>
@@ -20,8 +20,7 @@ STATUS.md item <n> / decision <D-id>
 <your STATUS.md row / item changes and any decision in full (D-TBD-<slug>, who, what, why), for the merge role to record after merge; "none" is valid>
 
 ## [MERGE NOTE]
-- Hot files touched: <sim core, save model, UI kit, caps, floors, docs>
-- Floors: <suite base → new (+inc)>
+- Hot files touched: <sim core, save model, UI kit, caps, docs>
 - Review needed: <none | psc-sim-review by <agent>>
 - Director gate: <none | look approval pending | approved in D-id>
 - Ordering with other PRs: <…>
