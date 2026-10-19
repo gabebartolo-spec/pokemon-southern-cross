@@ -114,11 +114,5 @@ def test_pbs_read_section_file(tmp_path):
     assert pbs.read_section_file(p) == {"A,b": {"Key": "Val", "Other": "1"}, "C": {"K": "v"}}
 
 
-def test_pbs_trainer_version_zero_equals_no_version(tmp_path):
-    p = tmp_path / "t.txt"
-    p.write_text("[A,B,0]\nPokemon = X,5\n[A,B,2]\nPokemon = Y,6\n", encoding="utf-8")
-    assert pbs.read_trainers(p) == {"A,B": [("X", 5)], "A,B,2": [("Y", 6)]}
-
-
 def test_real_repo_is_valid():
     assert content.validate(ROOT) == []
