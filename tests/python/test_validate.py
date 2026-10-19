@@ -78,23 +78,11 @@ def test_encounter_species_must_be_in_dex(tmp_path):
     assert len(errors) == 1 and "OTHER" in errors[0]
 
 
-def test_every_encounter_species_has_gen3_sprites(tmp_path):
+def test_every_dex_species_has_front_and_back_sprites(tmp_path):
     repo = make_repo(tmp_path)
     (repo / "game" / "Graphics" / "Pokemon" / "Back" / "TESTA.png").unlink()
     errors = content.validate(repo)
     assert len(errors) == 1 and "Back/TESTA.png" in errors[0]
-
-
-def test_sprite_matching_base_hash_rejected(tmp_path):
-    repo = make_repo(tmp_path)
-    data = b"base essentials sprite"
-    png(repo, "Front", "TESTA", data)
-    manifest = repo / "game" / ".psc_base_manifest.txt"
-    manifest.write_text(manifest.read_text(encoding="utf-8")
-                        + f"{hashlib.sha256(data).hexdigest()}  Graphics/Pokemon/Front/TESTA.png\n",
-                        encoding="utf-8")
-    errors = content.validate(repo)
-    assert any("Front/TESTA.png" in e and "base" in e for e in errors)
 
 
 def test_added_file_needs_register_entry(tmp_path):

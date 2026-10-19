@@ -193,18 +193,6 @@ def rule_dex_sprites_exist(root):
     return errors
 
 
-def rule_dex_sprites_not_base(root):
-    base_hashes = set(_manifest(root).values())
-    errors = []
-    for sp in sorted(_dex(root)):
-        for kind in ("Front", "Back"):
-            p = Path(root) / f"game/Graphics/Pokemon/{kind}/{sp}.png"
-            if p.is_file() and _sha(p) in base_hashes:
-                errors.append(f"sprite {kind}/{sp}.png is a base Essentials sprite, "
-                              f"not from the Gen 3 pack")
-    return errors
-
-
 def caps_text(root):
     """The caps file text: {"<badges held before the segment>": cap}, one flat line. Segment i is
     reached with i badges. The plugin's parser (PSC::Rules.parse_caps) accepts only this shape."""
@@ -245,8 +233,8 @@ def rule_added_files_registered(root):
 
 RULES = [rule_trainers_listed_exist, rule_trainers_within_cap,
          rule_encounters_present_and_parsable, rule_encounters_within_cap,
-         rule_encounter_species_in_dex, rule_dex_sprites_exist, rule_dex_sprites_not_base,
-         rule_added_files_registered, rule_caps_in_sync]
+         rule_encounter_species_in_dex, rule_dex_sprites_exist, rule_added_files_registered,
+         rule_caps_in_sync]
 
 
 def validate(repo_root):

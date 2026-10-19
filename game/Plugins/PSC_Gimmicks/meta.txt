@@ -1,0 +1,5 @@
+Name       = PSC Gimmicks
+Version    = 1.0
+Essentials = 21.1
+Requires   = Generation 9 Pack
+Credits    = Pokemon Southern Cross

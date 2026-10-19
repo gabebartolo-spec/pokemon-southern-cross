@@ -72,7 +72,8 @@ def _text(raw):
 
 
 def _meta_name(meta_txt):
-    for line in meta_txt.read_text(encoding="utf-8").splitlines():
+    # utf-8-sig: Essentials accepts a BOM, and the v21.1 Hotfixes meta.txt has one.
+    for line in meta_txt.read_text(encoding="utf-8-sig").splitlines():
         key, _, value = line.partition("=")
         if key.strip().lower() == "name":
             return value.strip()
