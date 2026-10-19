@@ -111,3 +111,29 @@ def test_plugin_scripts_rxdata_matches_plugin_sources():
         assert sorted(compiled[name]) == sorted(files), name
         for f, data in files.items():
             assert compiled[name][f].replace(b"\r\n", b"\n") == data.replace(b"\r\n", b"\n"), f"{name}/{f} is stale"
+
+
+def _ruby_int_consts(src):
+    return {k: int(v) for k, v in re.findall(r"^\s*([A-Z_0-9]+)\s*=\s*(\d+)\s*$", src, re.M)}
+
+
+def test_screen_size_option_offers_only_1x_2x_3x_and_fullscreen():
+    # Ruling 2026-10-19: Screen Size offers 1x, 2x, 3x and Full; anything else becomes 2x.
+    src = (SCREEN_PLUGIN / "screen_size.rb").read_text(encoding="utf-8")
+    c = _ruby_int_consts(src)
+    scale = lambda size: (size + 1) * 0.5  # Essentials: window scale = (screensize + 1) / 2
+    assert [scale(c["SIZE_1X"]), scale(c["SIZE_2X"]), scale(c["SIZE_3X"])] == [1.0, 2.0, 3.0]
+    assert c["SIZE_FULL"] == 4  # Essentials' fullscreen value
+    sizes = re.search(r"SIZES\s*=\s*\[([^\]]*)\]", src).group(1).split(",")
+    assert [s.strip() for s in sizes] == ["SIZE_1X", "SIZE_2X", "SIZE_3X", "SIZE_FULL"]
+    assert re.search(r"DEFAULT_SIZE\s*=\s*SIZE_2X\b", src)
+    labels = re.search(r'"parameters"\s*=>\s*\[(.*?)\]', src).group(1)
+    assert re.findall(r'_INTL\("([^"]+)"\)', labels) == ["1x", "2x", "3x", "Full"]
+    assert 'MenuHandlers.add(:options_menu, :screen_size' in src
+
+
+def test_default_screen_size_is_2x():
+    # PokemonSystem's default screensize is (SCREEN_SCALE * 2).floor - 1; it must equal SIZE_2X.
+    scale = float(re.search(r"^\s*SCALE\s*=\s*([\d.]+)", (SCREEN_PLUGIN / "screen.rb").read_text(), re.M).group(1))
+    size_2x = _ruby_int_consts((SCREEN_PLUGIN / "screen_size.rb").read_text(encoding="utf-8"))["SIZE_2X"]
+    assert int(scale * 2) - 1 == size_2x

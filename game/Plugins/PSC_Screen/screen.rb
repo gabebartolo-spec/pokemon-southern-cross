@@ -1,10 +1,10 @@
 #===============================================================================
 # PSC Screen (D-017): the game runs at 480x320, exactly twice the GBA's 240x160.
 # The window opens at 2x (960x640, mkxp.json) with integer scaling and no
-# smoothing. Essentials reads Settings::SCREEN_WIDTH/HEIGHT in
-# pbSetResizeFactor (Graphics.resize_screen), which runs in Game.set_up_system,
-# after plugins load, so overriding the constants here is enough for the screen
-# itself. A few constants and viewports were already computed from the old
+# smoothing. Settings::SCREEN_WIDTH/HEIGHT are read by pbSetResizeFactor
+# (Graphics.resize_screen; replaced in screen_size.rb), which runs in
+# Game.set_up_system after plugins load, so overriding the constants here is
+# enough for the screen itself. A few constants and viewports were already computed from the old
 # 512x384 when Essentials' scripts loaded; they are recomputed below.
 #===============================================================================
 module PSC
@@ -54,19 +54,6 @@ PSC::Screen.redefine(Game_Player, :SCREEN_CENTER_Y,
     next if !klass.class_variable_defined?(var)
     klass.class_variable_get(var).rect = Rect.new(0, 0, Settings::SCREEN_WIDTH, Settings::SCREEN_HEIGHT)
   end
-end
-
-# pbSetResizeFactor runs Graphics.resize_screen once, then sets Graphics.scale.
-# mkxp-z applies the resize on the next frame and resets the scale to 1.0, so
-# the window would open at 480x320. Set the scale again after that frame.
-alias psc_screen_set_resize_factor pbSetResizeFactor
-def pbSetResizeFactor(factor)
-  first_resize = !$ResizeInitialized
-  psc_screen_set_resize_factor(factor)
-  return if !first_resize || factor < 0 || factor == 4
-  Graphics.update
-  Graphics.scale = (factor + 1) * 0.5
-  Graphics.center
 end
 
 # Lets a plugin give an IconSprite a bitmap it built in code (e.g. a squeezed

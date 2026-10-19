@@ -17,6 +17,20 @@ class Battle::Scene
   PSC::Screen.redefine(self, :FOE_BASE_X, Settings::SCREEN_WIDTH - 128)
   PSC::Screen.redefine(self, :FOE_BASE_Y, (Settings::SCREEN_HEIGHT * 3 / 4) - 112 - FOE_SIDE_LIFT_Y)
 
+  # Double battles: Essentials spaces each side's two battlers 80 pixels apart,
+  # which on this narrower scene put the player's lead almost on top of its
+  # ally. Spread both sides further apart (extra x per battler index).
+  DOUBLE_SPREAD_X = [-24, 8, 8, -16]
+
+  class << self
+    alias psc_screen_pbBattlerPosition pbBattlerPosition
+    def pbBattlerPosition(index, sideSize = 1)
+      ret = psc_screen_pbBattlerPosition(index, sideSize)
+      ret[0] += DOUBLE_SPREAD_X[index] if sideSize == 2
+      return ret
+    end
+  end
+
   # overlay_message.png is one 512-wide box; its middle is plain fill.
   MESSAGE_BOX_CUT_X = 240
 
